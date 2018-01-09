@@ -1,3 +1,11 @@
+#top{
+        background: url(randomcode2.png) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
 .masthead.segment {
       min-height: 700px;
       padding: 1em 0em;

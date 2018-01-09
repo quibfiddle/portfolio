@@ -37,87 +37,48 @@
 </div>
 
 
-<div class="pusher">
 
-  <div class="ui inverted vertical masthead center aligned segment" id="top">
-    <div class="ui text container">
-      <h1 class="ui inverted header">
-        Engineer and Developer
-      </h1>
-      <h2>I'm a network engineer with a nack for analyzing workflows and designing automation to make things simpler.</h2>
-    </div>
-  </div>
-  
+
+<div class="ui inverted vertical masthead center aligned segment" id="top">
+   <div class="ui text container">
+     <h1 class="ui inverted header">
+      Engineer and Aspiring Developer
+     </h1>
+     <h2>I'm a network engineer with a nack for analyzing workflows and designing automation to make things simpler.</h2>
+   </div>
 </div>
-
-
-<!--<div class="ui vertical stripe segment">-->
-<!--    <div class="ui middle aligned stackable grid container">-->
-<!--      <div class ="row">-->
-<!--        <h2 class="ui header" id="projects">Projects</h2>-->
-<!--      </div>-->
-<!--      <div class="row">-->
-<!--        <div class="eight wide column">-->
-<!--          <h3 class="ui header">Bitdefender Cutover</h3>-->
-<!--          <p>Designed, wrote and deployed a script to 30,000 endpoints that removed the previous antivirus solution, installed Bitdefender and enrolled the new installation into the correct organizational group in Bitdefenders Gravityzone webmanagement console.</p>-->
-<!--        </div>-->
-<!--        <div class="eight wide right floated column">-->
-<!--          <img src="Bitdefender placeholder.png" class="ui large bordered rounded image">-->
-<!--        </div>-->
-<!--        <div class="eight wide column">-->
-<!--          <img src="YelpCampPlaceholder.png" class="ui large bordered rounded image">-->
-<!--        </div>-->
-<!--        <div class="eight wide right floated column">-->
-<!--           <h3 class="ui header">Yelp Camp</h3>-->
-<!--           <p>Centerpiece project created in Colt Steele's Web Developer Bootcamp, where we learned several key concepts for Web Development focused around the MEAN stack.</p>-->
-<!--      </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <div class="ui vertical stripe segment">
     <div class="ui middle aligned stackable grid container">
+      
       <div class ="row">
         <h2 class="ui header" id="projects">
           <img src="SettingsInverted.jpg" class="ui circular image">
           Projects
           </h2>
       </div>
-      <div class="ui divided items">
-        <div class="item">
-          <div class="image">
-            <img src="Bitdefender placeholder.png">
-          </div>
-          <div class="content">
-            <span class="header">Bitdefender Cutover Project</span>
-            <div class="meta">
-              <span>Designed, wrote and deployed a script to 30,000 endpoints that removed the previous antivirus solution, installed Bitdefender and enrolled the new installation into the correct organizational group in Bitdefenders Gravityzone webmanagement console.</span>
-            </div>
-            <!--<div class="description">-->
-            <!--  <p></p>-->
-            <!--</div>-->
-            <!--<div class="extra">-->
-            <!--  <a href="/Bitdefender"> Additional Details </a>-->
-            <!--</div>-->
-          </div>
+      
+      <div class ="row">
+        <div class="ui segment">
+          <h3 class="ui header">Bitdefender Cutover</h3>
+          <img class="ui medium right floated image" src="AVGtoBitdefender.png">
+          <p>In this project I assisted <a href=”https://www.allcovered.com/”> All Covered </a> with replacing their  aging monitored antivirus, <a href="http://help.kaseya.com/webhelp/EN/KES/9030000/EN_kesguide_R93.pdf">KES</a> (Kaseya’s monitored version of AVG), with a new monitored solution, <a href="https://www.bitdefender.com/">Bitdefender</a>, on all ~30,000 monitored endpoints. Due to the scale of the project, it would have been unreasonable to not automate this process. </p>
+          <p>This automation was achieved with two key programs: An engineer at Bitdefender built an application to mirror the organizational structure of the Kaseya Machine Groups into Bitdefender’s web management console, Gravityzone, leveraging Kaseya and Bitdefender APIs. I developed the other program, which was run on the endpoints. My script did the following:</p>
+              <div class="ui ordered list">
+                  <div class="item">Evaluate the endpoint’s Kaseya Machine Group membership, OS architecture, and currently installed AV,</div>
+                  <div class="item">Uninstall any competitive antivirus solutions</div>
+                  <div class="item">Translate the Machine Group membership and OS architecture of the endpoint into information used by the Bitdefender API to request an appropriate installation package from Gravityzone</div>
+                  <div class="item">Install Bitdefender</div>
+              </div>
         </div>
-        <div class="item">
-          <div class="image">
-            <img src="YelpCampPlaceholder.png">
-          </div>
-          <div class="content">
-            <span class="header">YelpCamp</span>
-            <div class="meta">
-              <span>Centerpiece project created in Colt Steele's Web Developer Bootcamp, where we learned several key concepts for Web Development focused around the MEAN stack.</span>
-            </div>
-            <!--<div class="description">-->
-            <!--  <p></p>-->
-            <!--</div>-->
-            <!--<div class="extra">-->
-            <!--  <a>See it running</a>-->
-            </div>
-          </div>
+        <div class="ui segment">
+          <h3 class="ui header">YelpCamp</h3>
+          <img class="ui medium left floated image" src="YelpCampPlaceholder.png">
+          <p>Centerpiece project created in Colt Steele's Web Developer Bootcamp, where we learned several key concepts for Web Development focused around the MEAN stack. Feel free to check it out <a href="">here</a>; just keep in mind that this application was just a series of proofs of concepts.</p>
+          <p>Also, I am not actively moderating the site, so dont post anything horrible</p>
         </div>
+      </div>
+      
       </div>
     </div>
 </div>
