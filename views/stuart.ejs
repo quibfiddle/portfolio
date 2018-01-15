@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,7 +23,7 @@
 
 <body>
 
-<div class="ui large top fixed hidden menu">
+<div class="ui inverted large top fixed hidden menu">
   <div class="ui container">
     <a class="item" href="#top">Stuart Bingham</a>
 
@@ -36,24 +35,42 @@
   </div>
 </div>
 
-
-
-
 <div class="ui inverted vertical masthead center aligned segment" id="top">
    <div class="ui text container">
      <h1 class="ui inverted header">
       Engineer and Aspiring Developer
      </h1>
-     <h2>I'm a network engineer with a nack for analyzing workflows and designing automation to make things simpler.</h2>
+     <h2>I'm a network engineer with a knack for analyzing workflows and designing automation to make things simpler.</h2>
    </div>
 </div>
+
+<div class="ui vertical stripe segment">
+    <div class="ui middle aligned stackable grid container">
+      <div class="row">
+        <div class="eight wide column">
+          <h3 class="ui header">About Me</h3>
+          <p>I am a tech-savvy engineer, currently living in Phoenix, that has been working in the field of IT Managed Services. Working in IT Managed Services, I have supported hundreds of companies across the US which has given me the opportunity to learn the ins and outs of countless technologies and how they are used in business environments. You can read more about my experience on my Resume.</p>
+          <p>What interests me now is drawing from my wide understanding of these different technologies, and building applications, systems and automation that helps tie it all together, and ultimately let companies do business better.</p>
+        </div>
+        <div class="six wide right floated column">
+          <img src="StuartBingham.jpg" class="ui large bordered rounded image">
+        </div>
+      </div>
+      <div class="row">
+        <div class="center aligned column">
+          <a href="/resume"  class="grey ui huge button">Stuart's Resume</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 <div class="ui vertical stripe segment">
     <div class="ui middle aligned stackable grid container">
       
       <div class ="row">
         <h2 class="ui header" id="projects">
-          <img src="SettingsInverted.jpg" class="ui circular image">
+          <!--<img src="SettingsInverted.jpg" class="ui circular image">-->
           Projects
           </h2>
       </div>
@@ -61,8 +78,8 @@
       <div class ="row">
         <div class="ui segment">
           <h3 class="ui header">Bitdefender Cutover</h3>
-          <img class="ui medium right floated image" src="AVGtoBitdefender.png">
-          <p>In this project I assisted <a href=”https://www.allcovered.com/”> All Covered </a> with replacing their  aging monitored antivirus, <a href="http://help.kaseya.com/webhelp/EN/KES/9030000/EN_kesguide_R93.pdf">KES</a> (Kaseya’s monitored version of AVG), with a new monitored solution, <a href="https://www.bitdefender.com/">Bitdefender</a>, on all ~30,000 monitored endpoints. Due to the scale of the project, it would have been unreasonable to not automate this process. </p>
+          <img class="ui medium left floated image" src="AVGtoBitdefender.png">
+          <p>In this project I assisted <a href=”https://www.allcovered.com/”> AllCovered </a> with replacing their  aging monitored antivirus, <a href="http://help.kaseya.com/webhelp/EN/KES/9030000/EN_kesguide_R93.pdf">KES</a> (Kaseya’s monitored version of AVG), with a new monitored solution, <a href="https://www.bitdefender.com/">Bitdefender</a>, on all ~30,000 monitored endpoints. Due to the scale of the project, it would have been unreasonable to not automate this process. </p>
           <p>This automation was achieved with two key programs: An engineer at Bitdefender built an application to mirror the organizational structure of the Kaseya Machine Groups into Bitdefender’s web management console, Gravityzone, leveraging Kaseya and Bitdefender APIs. I developed the other program, which was run on the endpoints. My script did the following:</p>
               <div class="ui ordered list">
                   <div class="item">Evaluate the endpoint’s Kaseya Machine Group membership, OS architecture, and currently installed AV,</div>
@@ -73,7 +90,7 @@
         </div>
         <div class="ui segment">
           <h3 class="ui header">YelpCamp</h3>
-          <img class="ui medium left floated image" src="YelpCampPlaceholder.png">
+          <img class="ui medium right floated image" src="YelpCampPlaceholder.png">
           <p>Centerpiece project created in Colt Steele's Web Developer Bootcamp, where we learned several key concepts for Web Development focused around the MEAN stack. Feel free to check it out <a href="">here</a>; just keep in mind that this application was just a series of proofs of concepts.</p>
           <p>Also, I am not actively moderating the site, so don't post anything horrible.</p>
         </div>
@@ -88,7 +105,7 @@
     <div class="ui middle aligned stackable grid container">
       <div class ="row">
         <h2 class="ui header" id="contact">
-          <img src="StuartBingham.jpg" class="ui circular image">
+          <!--<img src="StuartBingham.jpg" class="ui circular image">-->
           Contact Me
           </h2>
       </div>
@@ -132,9 +149,9 @@
       </div>
        <div class="row">
           <div class= "column">
-            <a href="https://github.com/quibfiddle"><i class="github icon"></i></a>
-            <a href="mailto:bingham.stuart@gmail.com"><i class="mail icon"></i></a>
-            <a href="https://c9.io/quibfiddle"><i class="lab icon"></i></a>
+            <a href="https://github.com/quibfiddle"><button class="black ui icon button"><i class="github icon"></i></button></a>
+            <a href="mailto:bingham.stuart@gmail.com"><button class="black ui icon button"><i class="mail icon"></i></button></a>
+            <a href="https://c9.io/quibfiddle"><button class="black ui icon button"><i class="lab icon"></i></button></a>
           </div>
       </div>
       </div>

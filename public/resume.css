@@ -1,0 +1,16 @@
+.ui.container{
+    margin: 20px;
+}
+
+.sub{
+    margin: 0px;
+}
+
+h4{
+  margin:0px;  
+}
+
+.ui.grid > .column:not(.row){
+    padding-bottom: 3px;
+    padding-top: 3px;
+}

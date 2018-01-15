@@ -58,6 +58,11 @@ app.post("/contact", function(req, res){
     });
 });
 
+app.get("/resume", function(req, res){
+      res.render("resume")
+});
+
+
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("server has started");
 });
