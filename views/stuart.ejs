@@ -8,16 +8,16 @@
 <title>Stuart Bingham</title>
  
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" />
-<link rel="stylesheet" type="text/css" href="stuart.css">
+<link rel="stylesheet" type="text/css" href="stylesheets/stuart.css">
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script type="text/javascript" src="semantic.min.js"></script>
+<script type="text/javascript" src="scripts/semantic.min.js"></script>
 <script
   src="https://code.jquery.com/jquery-1.12.4.min.js"
   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
   crossorigin="anonymous"></script>
-
-<link rel="shortcut icon" href="SBicon.ico">
+  
+<link rel="shortcut icon" href="images/SBicon.ico">
 
 </head>
 
@@ -53,7 +53,7 @@
           <p>What interests me now is drawing from my wide understanding of these different technologies, and building applications, systems and automation that helps tie it all together, and ultimately let companies do business better.</p>
         </div>
         <div class="six wide right floated column">
-          <img src="StuartBingham.jpg" class="ui large bordered rounded image">
+          <img src="images/StuartBingham.jpg" class="ui large bordered rounded image">
         </div>
       </div>
       <div class="row">
@@ -70,7 +70,6 @@
       
       <div class ="row">
         <h2 class="ui header" id="projects">
-          <!--<img src="SettingsInverted.jpg" class="ui circular image">-->
           Projects
           </h2>
       </div>
@@ -78,7 +77,7 @@
       <div class ="row">
         <div class="ui segment">
           <h3 class="ui header">Bitdefender Cutover</h3>
-          <img class="ui medium left floated image" src="AVGtoBitdefender.png">
+          <img class="ui medium left floated image" src="images/AVGtoBitdefender.png">
           <p>In this project I assisted <a href=”https://www.allcovered.com/”> AllCovered </a> with replacing their  aging monitored antivirus, <a href="http://help.kaseya.com/webhelp/EN/KES/9030000/EN_kesguide_R93.pdf">KES</a> (Kaseya’s monitored version of AVG), with a new monitored solution, <a href="https://www.bitdefender.com/">Bitdefender</a>, on all ~30,000 monitored endpoints. Due to the scale of the project, it would have been unreasonable to not automate this process. </p>
           <p>This automation was achieved with two key programs: An engineer at Bitdefender built an application to mirror the organizational structure of the Kaseya Machine Groups into Bitdefender’s web management console, Gravityzone, leveraging Kaseya and Bitdefender APIs. I developed the other program, which was run on the endpoints. My script did the following:</p>
               <div class="ui ordered list">
@@ -91,7 +90,7 @@
       
         <div class="ui segment">
           <h3 class="ui header">YelpCamp</h3>
-          <img class="ui medium right floated image" src="YelpCampPlaceholder.png">
+          <img class="ui medium right floated image" src="images/YelpCampPlaceholder.png">
           <p>Centerpiece project created in Colt Steele's Web Developer Bootcamp, where we learned several key concepts for Web Development focused around the MEAN stack. Feel free to check it out <a href="https://serene-refuge-79157.herokuapp.com/">here</a>.</p>
           <p>Also, I am not actively moderating the site, so don't post anything horrible.</p>
         </div>
@@ -176,5 +175,9 @@
 
 
 </body>
+
+<% if((success && success.length > 0)||(error && error.length > 0)){ %>
+<script type="text/javascript" src="scripts/gotomessage.js"></script>
+<% } %>
 
 </html>
