@@ -92,7 +92,7 @@
         <div class="ui segment">
           <h3 class="ui header">YelpCamp</h3>
           <img class="ui medium right floated image" src="YelpCampPlaceholder.png">
-          <p>Centerpiece project created in Colt Steele's Web Developer Bootcamp, where we learned several key concepts for Web Development focused around the MEAN stack. Feel free to check it out <a href="https://serene-refuge-79157.herokuapp.com/">here</a>; As of 1/18/2018 this application is not yet styled, and full CRUD hasnt been implemented.</p>
+          <p>Centerpiece project created in Colt Steele's Web Developer Bootcamp, where we learned several key concepts for Web Development focused around the MEAN stack. Feel free to check it out <a href="https://serene-refuge-79157.herokuapp.com/">here</a>.</p>
           <p>Also, I am not actively moderating the site, so don't post anything horrible.</p>
         </div>
       
@@ -110,6 +110,20 @@
           <!--<img src="StuartBingham.jpg" class="ui circular image">-->
           Contact Me
           </h2>
+      </div>
+      <div class="row">
+        <div class="container">
+        <% if(success && success.length > 0){ %>
+        <div class="ui green message">
+          <strong><%= success %></strong>
+        </div>
+        <% } %>
+        <% if(error && error.length > 0){ %>
+        <div class="ui red message">
+          <strong><%= error %></strong>
+        </div>
+        <% } %>
+        </div>
       </div>
   
   <form method="POST" 
