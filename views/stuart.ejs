@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+<title>Stuart Bingham</title>
+ 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" />
+<link rel="stylesheet" type="text/css" href="stylesheets/stuart.css">
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="scripts/semantic.min.js"></script>
+<script
+  src="https://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
+  
+<link rel="shortcut icon" href="images/SBicon.ico">
+
+</head>
+
+<body>
+
+<div class="ui inverted large top fixed hidden menu">
+  <div class="ui container">
+    <a class="item" href="#top">Stuart Bingham</a>
+
+    <div class="right menu">
+        <a class="item" href="#projects">Projects</a>
+        <a class="item" href="#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ui inverted vertical masthead center aligned segment" id="top">
+   <div class="ui text container">
+     <h1 class="ui inverted header">
+      Engineer and Aspiring Developer
+     </h1>
+     <h2>I'm a network engineer with a knack for analyzing workflows and designing automation to make things simpler.</h2>
+   </div>
+</div>
+
+<div class="ui vertical stripe segment">
+    <div class="ui middle aligned stackable grid container">
+      <div class="row">
+        <div class="eight wide column">
+          <h3 class="ui header">About Me</h3>
+          <p>I am a tech-savvy engineer, currently living in Phoenix, that has been working in the field of IT Managed Services. Working in this field, I have supported hundreds of companies across the US which has given me the opportunity to learn the ins and outs of countless technologies and how they are used in business environments. You can read more about my experience on my Resume.</p>
+          <p>What interests me now is drawing from my wide understanding of these different technologies, and building applications, systems and automation that helps tie it all together, and ultimately let companies do business better.</p>
+        </div>
+        <div class="six wide right floated column">
+          <img src="images/StuartBingham.jpg" class="ui large bordered rounded image">
+        </div>
+      </div>
+      <div class="row">
+        <div class="center aligned column">
+          <a href="/resume"  class="grey ui huge button">Stuart's Resume</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="ui vertical stripe segment">
+    <div class="ui middle aligned stackable grid container">
+      
+      <div class ="row">
+        <h2 class="ui header" id="projects">
+          Projects
+          </h2>
+      </div>
+      
+      <div class ="row">
+        <div class="ui segment">
+          <h3 class="ui header">Bitdefender Cutover</h3>
+          <img class="ui medium left floated image" src="images/AVGtoBitdefender.png">
+          <p>In this project I assisted <a href=”https://www.allcovered.com/”> AllCovered </a> with replacing their  aging monitored antivirus, <a href="http://help.kaseya.com/webhelp/EN/KES/9030000/EN_kesguide_R93.pdf">KES</a> (Kaseya’s monitored version of AVG), with a new monitored solution, <a href="https://www.bitdefender.com/">Bitdefender</a>, on all ~30,000 monitored endpoints. Due to the scale of the project, it would have been unreasonable to not automate this process. </p>
+          <p>This automation was achieved with two key programs: An engineer at Bitdefender built an application to mirror the organizational structure of the Kaseya Machine Groups into Bitdefender’s web management console, Gravityzone, leveraging Kaseya and Bitdefender APIs. I developed the other program, which was run on the endpoints. My script did the following:</p>
+              <div class="ui ordered list">
+                  <div class="item">Evaluate the endpoint’s Kaseya Machine Group membership, OS architecture, and currently installed AV,</div>
+                  <div class="item">Uninstall any competitive antivirus solutions</div>
+                  <div class="item">Translate the Machine Group membership and OS architecture of the endpoint into information used by the Bitdefender API to request an appropriate installation package from Gravityzone</div>
+                  <div class="item">Install Bitdefender</div>
+              </div>
+        </div>
+      
+        <div class="ui segment">
+          <h3 class="ui header">YelpCamp</h3>
+          <img class="ui medium right floated image" src="images/YelpCampPlaceholder.png">
+          <p>Centerpiece project created in Colt Steele's Web Developer Bootcamp, where we learned several key concepts for Web Development focused around the MEAN stack. Feel free to check it out <a href="https://serene-refuge-79157.herokuapp.com/">here</a>.</p>
+          <p>Also, I am not actively moderating the site, so don't post anything horrible.</p>
+        </div>
+      
+      </div>
+      
+      </div>
+    </div>
+</div>
+
+
+<div class="ui vertical stripe segment">
+    <div class="ui middle aligned stackable grid container">
+      <div class ="row">
+        <h2 class="ui header" id="contact">
+          <!--<img src="StuartBingham.jpg" class="ui circular image">-->
+          Contact Me
+          </h2>
+      </div>
+      <div class="row">
+        <div class="container">
+        <% if(success && success.length > 0){ %>
+        <div class="ui green message">
+          <strong><%= success %></strong>
+        </div>
+        <% } %>
+        <% if(error && error.length > 0){ %>
+        <div class="ui red message">
+          <strong><%= error %></strong>
+        </div>
+        <% } %>
+        </div>
+      </div>
+  
+  <form method="POST" 
+        action="/contact" 
+        name="contact" 
+        class="ui form attached fluid segment">
+    <div class="field">
+      <div class="field">
+        
+        <label>Name</label>
+        <input type="text" placeholder="Name" name="contact[name]">
+      
+      </div>
+    </div>
+    <div class="field">
+      
+      <label>Email Address</label>
+      <input type="email" placeholder="Email" name="contact[email]">
+  
+    </div>
+    <div class="field">
+      
+      <label>Message</label>
+      <textarea name="contact[message]"></textarea>
+    
+    </div>
+    <button type="submit" class="ui submit secondary button">Send</div>
+  </form>
+
+</div>
+
+<div class="ui inverted vertical footer segment">
+    <div class="ui container">
+      <div class="ui grid">
+       <div class="row">
+          <div class= "column">Made by Stuart Bingham, leveraging Semantic UI, Semantic UI Themes, and JQuery
+        </div>
+        </div>
+      </div>
+       <div class="row">
+          <div class= "column">
+            <a href="https://github.com/quibfiddle"><button class="black ui icon button"><i class="github icon"></i></button></a>
+            <a href="mailto:bingham.stuart@gmail.com"><button class="black ui icon button"><i class="mail icon"></i></button></a>
+            <a href="https://c9.io/quibfiddle"><button class="black ui icon button"><i class="lab icon"></i></button></a>
+          </div>
+      </div>
+      </div>
+
+</div>
+
+
+</body>
+
+<% if((success && success.length > 0)||(error && error.length > 0)){ %>
+<script type="text/javascript" src="scripts/gotomessage.js"></script>
+<% } %>
+
+</html>
