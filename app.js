@@ -43,8 +43,8 @@ app.post("/contact", function(req, res){
         port: 465,
         secure: true, // true for 465, false for other ports
         auth: {
-            user: "stuart@stuartbingham.net", // generated ethereal user
-            pass: "C0atofArms44"  // generated ethereal password
+            user: process.env.EMAILUSER, // generated ethereal user
+            pass: process.env.EMAILPASSWORD  // generated ethereal password
         },
         tls:{
             rejectUnauthorized:false
