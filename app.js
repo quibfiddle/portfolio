@@ -21,13 +21,20 @@ app.use(require("express-session")({
     saveUninitialized: false
 }));
 
+//Load HTTP module
+// const http = require("http");
+// const hostname = '127.0.0.1';
+// const port = 3000;
+//
+// const server = http.createServer((req, res) => {
+
 app.use(function(req, res, next){
     res.locals.error = req.flash("error")
     res.locals.success = req.flash("success");
    next();
 });
 
-    
+
 app.get("/", function(req, res){
       res.render("stuart")
 });
@@ -36,7 +43,7 @@ app.post("/contact", function(req, res){
     // console.log(req.body.contact);
     // res.redirect("/");
     var output = "<p>New contact request from " + req.body.contact.name + " at " + req.body.contact.email + "</p> <p>message: " + req.body.contact.message + "</p>";
-    
+
      // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -79,7 +86,9 @@ app.get("/resume", function(req, res){
       res.render("resume")
 });
 
+// use port 3000 unless there exists a preconfigured port
+var port = process.env.port || 3000;
 
-app.listen(process.env.PORT, process.env.IP, function(){
+app.listen(port, process.env.IP, function(){
     console.log("server has started");
 });
