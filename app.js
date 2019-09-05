@@ -89,10 +89,6 @@ app.get("/resume", function(req, res){
       res.render("resume")
 });
 
-
-// use port 3000 unless there exists a preconfigured port
-var port = process.env.port || 3000;
-
-app.listen(port, process.env.IP, function(){
+app.listen(process.env.port, process.env.IP, function(){
     console.log("server has started");
 });
