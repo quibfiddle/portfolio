@@ -22,7 +22,7 @@ app.get("/resume", function(req, res){
 });
 
 app.get("/.well-known/acme-challenge/I_BF_UCVrmAcrrmIqKP_2MZcPsWkYkuNU4VCG5wyp6Y", function(req, res){
-      res.render("letsencrypt")
+      res.send("I_BF_UCVrmAcrrmIqKP_2MZcPsWkYkuNU4VCG5wyp6Y.agX3oqzLnj_wkShCF8ByhoBhIwNUkexMnNo0b8TBF-w")
 });
 
 
