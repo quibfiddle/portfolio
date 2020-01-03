@@ -6,6 +6,15 @@
         background-size: cover;
 }
 
+/*#myVideo {*/
+/*  position: fixed;*/
+/*  right: 0;*/
+/*  bottom: 0;*/
+/*  min-width: 100%;*/
+/*  min-height: 100%;*/
+/*}*/
+
+
 .masthead.segment {
       min-height: 540px;
       padding: 1em 0em;
@@ -64,11 +73,7 @@
     .secondary.pointing.menu .toc.item {
       display: none;
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> d4d6a963279b98ae97c17296312132723ecfe00a
 .ui.horizontal.section.divider {
   font-size: 1.5em;
 }
