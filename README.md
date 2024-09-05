@@ -8,4 +8,5 @@ docker build . -t portfolio
 docker run -d -p 80:80 -p 443:443 portfolio
 
 //docker interactive command for installing the cert:
-docker exec -it my-apache-server certbot --apache -d stuartbingham.net -d www.stuartbingham.net
+docker exec -it [docker-container-id] certbot --nginx -d stuartbingham.net -d www.stuartbingham.net
+
