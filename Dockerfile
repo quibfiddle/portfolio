@@ -7,7 +7,7 @@ RUN apt-get update && \
     apt-get clean
 
 # Copy your HTML, CSS, JS, and image files into the Nginx web directory
-COPY ./public/ /usr/share/nginx/html/
+COPY ./dist/ /usr/share/nginx/html/
 
 # Copy a basic Nginx configuration file
 COPY ./nginx.conf /etc/nginx/nginx.conf
