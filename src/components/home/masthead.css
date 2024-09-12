@@ -1,0 +1,21 @@
+#top{
+    background: url(../images/randomcode2.png) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 540px;
+    padding: 1em 0em;
+}
+
+.masthead h1 {
+    margin-top: 2em;
+    margin-bottom: .5em;
+    font-size: 4em;
+    font-weight: normal;
+  }
+
+.masthead h2 {
+    font-size: 1.7em;
+    font-weight: normal;
+  }

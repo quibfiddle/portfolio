@@ -1,0 +1,21 @@
+.text-display-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-top: 80px;   /* These two lines adjust the spacing above the dividers so the navbar doesn't cover it up*/
+    margin-top: -80px;   /* Equal to the height of the navbar */
+  }
+  
+  .text-display-line {
+    flex: 1; /* Takes up remaining space */
+    border: none;
+    border-top: 1px solid #000000; /* Customize the border style */
+    margin: 0 10px; /* Adjust spacing between the line and text */
+  }
+  
+  .text-display-text {
+    white-space: nowrap; /* Prevents text from wrapping */
+    font-size: 21px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
