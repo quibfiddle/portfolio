@@ -44,6 +44,14 @@ function Projects() {
                 </Row>
             </Container>
         </Tab>
+        <Tab eventKey="api" title="API Development">
+            <Container>
+                <Row >
+                    <Col xs={12} md={4} className="d-flex justify-content-center align-items-center mb-3 mb-md-0"><Image src="/images/reminereversegeocodingapi.png" fluid></Image></Col>
+                    <Col xs={12} md={8}><h3>Property Analyzer API</h3><span>Here, I built the specification and lead the development an API that accepted a residential street address and a radius or a set of Lat and Longitudes defining a polygon. With those values, it built a grid of points within the provided radius or polygon and preformed reverse geocoding on each of those points. Once the reverse geocoding completed, We were able to look up public record information and about each of those addresses, and build a list of houses that are comparable to the provided residential address.</span></Col>
+                </Row>
+            </Container>
+        </Tab>
         <Tab eventKey="it" title="IT">
             <Container>
                 <Row >

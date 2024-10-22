@@ -6,7 +6,7 @@ const Footer = () => {
     <div className="bg-dark text-light py-5" id="contact">
       <Container>
         <Row className="justify-content-center">
-          <Col md={3}>
+          {/* <Col md={3}>
             <h4>Find Me On Other Sites</h4>
             <ListGroup variant="flush">
               <ListGroup.Item className="bg-dark border-0">
@@ -25,9 +25,9 @@ const Footer = () => {
                 </a>
               </ListGroup.Item>
             </ListGroup>
-          </Col>
+          </Col> */}
 
-          <Col md={3}>
+          <Col md={6}>
             <h4>More about This Site</h4>
             <ListGroup variant="flush">
               <ListGroup.Item className="bg-dark border-0">
