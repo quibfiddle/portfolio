@@ -31,7 +31,7 @@ const Footer = () => {
             <h4>More about This Site</h4>
             <ListGroup variant="flush">
               <ListGroup.Item className="bg-dark border-0">
-                <a href="/resume" className="text-light">
+                <a href="/resume.html" className="text-light">
                   Resume
                 </a>
               </ListGroup.Item>
