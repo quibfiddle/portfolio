@@ -93,7 +93,7 @@ As needed for unique page layouts:
 
 ### 5. Generate Redirects File
 
-Create `public/_redirects` for Cloudflare Pages:
+Create `public/_redirects` for Cloudflare Workers:
 
 ```
 # Redirects from old pages
@@ -173,7 +173,7 @@ When user approves:
 ```
 Site complete!
 
-To deploy to Cloudflare:
+To deploy to Cloudflare Workers:
   npm run deploy
 
 Or push to git for CI/CD deployment.

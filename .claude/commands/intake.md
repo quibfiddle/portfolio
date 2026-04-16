@@ -148,5 +148,5 @@ Ready for /project:homepage
 ## Notes
 
 - The reconciliation step is crucial for SEO - ensures no 404s from old links
-- Redirects are generated as `public/_redirects` (Cloudflare Pages format)
+- Redirects are generated as `public/_redirects` (Cloudflare Workers format)
 - State tracks everything for session recovery

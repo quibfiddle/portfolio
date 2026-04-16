@@ -361,7 +361,7 @@ Flip the site live. Remove staging artifacts, confirm everything is indexed and 
    - All scripts from the old site are carried over
    - `sitemap.xml` is accessible
    - `robots.txt` allows crawling
-4. **Deploy** — push to production on Cloudflare
+4. **Deploy** — push to production on Cloudflare Workers
 5. **DNS** — this varies by project and is handled separately (not covered in this doc)
 6. **Verify post-deploy:**
    - Site loads on the production domain
@@ -398,7 +398,7 @@ We host and maintain the site. The client does not typically edit content direct
 | `npm run dev` | Start the local dev server (localhost:4321) |
 | `npm run build` | Build the site for production |
 | `npm run test` | Run Playwright tests |
-| `npm run deploy` | Deploy to Cloudflare Pages |
+| `npm run deploy` | Deploy to Cloudflare Workers |
 
 ---
 
@@ -424,7 +424,7 @@ src/                  The actual website source code
 
 public/               Static files served as-is
   images/             Site images
-  _redirects          Redirect rules for Cloudflare
+  _redirects          Redirect rules for Cloudflare Workers
 
 .site-factory/        Build state tracking
   state.json          Current phase, page inventory, progress
