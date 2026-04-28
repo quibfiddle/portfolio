@@ -12,5 +12,12 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    // On fly.io's persistent volume, inotify doesn't reliably fire for
+    // newly-created files, so Vite/Tailwind miss new pages or classes
+    // until the server restarts. Polling sidesteps the broken inotify
+    // path. Local dev keeps native watching (FLY_APP_NAME is unset).
+    ...(process.env.FLY_APP_NAME && {
+      server: { watch: { usePolling: true, interval: 500 } },
+    }),
   },
 });
