@@ -106,6 +106,7 @@ See `docs/third-party-scripts.md` for the full guide, common scripts and their C
 - Pages follow `state.pages.planned` list
 - Design system documented in `src/DESIGN.md`
 - All images go in `public/images/` — never hotlink to external URLs
+- All internal links must end with a trailing slash (e.g. `/about/`, not `/about`) — Cloudflare resolves trailing-slash URLs directly while non-trailing URLs incur a redirect
 - Redirects go in `public/_redirects` (Cloudflare format)
 - Use `compound-engineering:frontend-design` skill for page generation
 
