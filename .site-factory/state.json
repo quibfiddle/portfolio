@@ -1,16 +1,83 @@
 {
-  "phase": "not_started",
-  "created_at": null,
-  "intake_processed_at": null,
+  "phase": "intake_complete",
+  "created_at": "2026-07-16T16:30:00-07:00",
+  "intake_processed_at": "2026-07-16T16:45:00-07:00",
   "homepage_generated_at": null,
   "homepage_approved_at": null,
   "pages_generated_at": null,
   "completed_at": null,
   "pages": {
-    "discovered": [],
-    "planned": [],
+    "discovered": [
+      {
+        "path": "/",
+        "title": "Thanh Tran — Software Engineer · Live Lab",
+        "in_nav": true
+      },
+      {
+        "path": "/about",
+        "title": "About — Thanh Tran",
+        "in_nav": true
+      },
+      {
+        "path": "/work",
+        "title": "Work — Thanh Tran",
+        "in_nav": true
+      },
+      {
+        "path": "/blog",
+        "title": "Blog — Thanh Tran",
+        "in_nav": true
+      },
+      {
+        "path": "/contact",
+        "title": "Contact — Thanh Tran",
+        "in_nav": true
+      },
+      {
+        "path": "/ai",
+        "title": "AI Lab — Thanh Tran",
+        "in_nav": true
+      },
+      {
+        "path": "/telemetry",
+        "title": "Live Telemetry — Thanh Tran",
+        "in_nav": true
+      },
+      {
+        "path": "/sandbox",
+        "title": "API Sandbox — Thanh Tran",
+        "in_nav": true
+      },
+      {
+        "path": "/queue-lab",
+        "title": "Queue Ops Lab — Thanh Tran",
+        "in_nav": true
+      },
+      {
+        "path": "/feedback",
+        "title": "Reviews & ideas — Thanh Tran",
+        "in_nav": false
+      },
+      {
+        "path": "/blog/shipping-the-sandbox",
+        "title": "Shipping a public API sandbox to a portfolio site — Thanh Tran",
+        "in_nav": false
+      },
+      {
+        "path": "/blog/telemetry-without-a-database",
+        "title": "Telemetry without a database — Thanh Tran",
+        "in_nav": false
+      }
+    ],
+    "planned": ["/", "/about/", "/work/", "/resume/", "/contact/"],
     "built": [],
-    "redirects": []
+    "redirects": [
+      { "from": "/resume.html", "to": "/resume/" }
+    ]
+  },
+  "notes": {
+    "reconciliation": "Discovered pages are from the reference site (thanhtran-portfolio.vercel.app), a different domain — its blog/lab pages (/blog, /ai, /telemetry, /sandbox, /queue-lab, /feedback) are intentionally out of scope and need no redirects. Redirects cover the client's OLD site (stuartbingham.net): a hash-anchor SPA whose only real non-root path was /resume.html.",
+    "content_sources": "intake/current-site-content.md (old-site copy incl. 6 projects + certifications), intake/resumes/ (2 PDF versions: developer + IT)"
   },
   "test_results": null,
   "seo_issues": []

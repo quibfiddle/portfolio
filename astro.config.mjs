@@ -12,7 +12,7 @@ const previewBase = process.env.PREVIEW_BASE;
 
 export default defineConfig({
   // Set this to your production URL (updated during deployment)
-  site: 'https://example.com',
+  site: 'https://stuartbingham.net',
   base: previewBase || undefined,
   output: 'static',
   integrations: [sitemap()],

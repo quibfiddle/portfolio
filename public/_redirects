@@ -1,0 +1,3 @@
+# Old site (stuartbingham.net) used a single-page SPA with hash anchors — only
+# real path besides / was resume.html.
+/resume.html /resume/ 301

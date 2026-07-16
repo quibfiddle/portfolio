@@ -1,47 +1,30 @@
 # Brand Typography
 
-Define your font choices here. Claude will configure Google Fonts and Tailwind.
+Client requested the Ubuntu font family (https://fonts.google.com/specimen/Ubuntu) — pairs with the Ubuntu brand color palette.
 
 ## Font Families
 
 ### Display Font (Headings)
-**Font:** Inter
-**Weights:** 600 (Semibold), 700 (Bold)
-**Google Fonts URL:** https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap
+**Font:** Ubuntu
+**Weights:** 500 (Medium), 700 (Bold)
+**Google Fonts URL:** https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&display=swap
 
 ### Body Font (Text)
-**Font:** Inter
+**Font:** Ubuntu
 **Weights:** 400 (Regular), 500 (Medium)
-**Google Fonts URL:** https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap
+**Google Fonts URL:** https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap
 
-## Alternative Options
+### Monospace Accent (code snippets, technical flourishes)
+**Font:** Ubuntu Mono
+**Weights:** 400 (Regular), 700 (Bold)
+**Google Fonts URL:** https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap
+- Use for: code-styled elements (e.g., a `profile object` hero treatment like the reference site), skill tags, terminal-flavored accents. Fits the developer/IT audience and the "little bit of fun" voice.
 
-If you prefer different fonts, update above. Popular combinations:
+## Combined Load (single request)
 
-### Professional
-- Display: Playfair Display
-- Body: Source Sans Pro
-
-### Modern
-- Display: Poppins
-- Body: Inter
-
-### Classic
-- Display: Merriweather
-- Body: Open Sans
-
-### Tech
-- Display: Space Grotesk
-- Body: DM Sans
+https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Ubuntu+Mono:wght@400;700&display=swap
 
 ## Font Loading Strategy
 
 Fonts are loaded via Google Fonts with `display=swap` to prevent layout shift.
-The browser will show a system font fallback until the custom font loads.
-
-## Custom Fonts
-
-If using custom fonts (not Google Fonts):
-1. Place font files in `public/fonts/`
-2. Create @font-face rules in global.css
-3. Update --font-display and --font-body in @theme
+Fallback stack: system-ui, -apple-system, sans-serif (Ubuntu Mono falls back to ui-monospace, monospace).

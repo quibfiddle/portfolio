@@ -1,41 +1,42 @@
 # Brand Colors
 
-Define your color palette here. Claude will use these to customize the Tailwind theme.
+Ubuntu core brand palette — client specifically requested it. Orange is the accent that pairs directly with the purples.
 
 ## Primary Colors
 
-**Primary:** #4f46e5 (Indigo)
-- Used for: Main CTA buttons, links, key UI elements
-- Hover state: Slightly darker
+**Primary:** #772953 (Canonical Aubergine)
+- Used for: Primary brand color, main backgrounds/headers, key UI elements
+- Hover state: Slightly darker (toward #5e2750)
 
-**Secondary:** #0891b2 (Cyan)
-- Used for: Secondary actions, accents
+**Secondary:** #77216f (Ubuntu Plum)
+- Used for: Secondary actions, gradients with primary, accents
 
-**Accent:** #f59e0b (Amber)
-- Used for: Highlights, badges, special callouts
+**Accent:** #e95420 (Ubuntu Accent Orange)
+- Used for: CTA buttons, links, highlights — pairs directly with the purples
+
+## Supporting Palette
+
+**Dark variant:** #5e2750 (Ubuntu Finn) — dark sections, hover states, depth
+**Muted neutral:** #AEA79F (Ubuntu Light Aubergine) — subtle accents, dividers, muted UI
 
 ## Neutral Colors
 
-**Text:** #1f2937 (Gray 800)
-**Muted Text:** #6b7280 (Gray 500)
+**Text:** #2c001e (Ubuntu Dark Aubergine — near-black with brand warmth)
+**Muted Text:** #6e6259 (darkened warm grey; #AEA79F itself is too light for body text on white — WCAG)
 **Background:** #ffffff (White)
-**Surface:** #f9fafb (Gray 50)
-**Border:** #e5e7eb (Gray 200)
+**Surface:** #F7F4ED (Ubuntu Warm Grey)
+**Border:** #e5e0d8 (Warm grey, slightly darker than surface)
 
 ## Semantic Colors
 
-**Success:** #10b981 (Emerald)
-**Warning:** #f59e0b (Amber)
-**Error:** #ef4444 (Red)
-**Info:** #3b82f6 (Blue)
+**Success:** #0e8420 (Ubuntu Green)
+**Warning:** #e95420 (Ubuntu Orange)
+**Error:** #c7162b (Ubuntu Red)
+**Info:** #772953 (Aubergine)
 
 ---
 
-## Color Format Notes
+## Contrast Notes
 
-For Tailwind v4 with oklch, colors will be converted automatically.
-You can also provide oklch values directly:
-
-```
-Primary: oklch(0.5 0.2 265)
-```
+- White text on #772953, #77216f, #5e2750, and #e95420: verify WCAG AA at the sizes used; orange (#e95420) with white text passes only at large text sizes — prefer orange backgrounds with white text at 18px+/bold, or use dark text.
+- #AEA79F is decorative only — never body text on light backgrounds.
