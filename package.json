@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev:worker": "astro build && wrangler dev",
     "build": "astro build",
     "preview": "astro preview",
     "test": "playwright test",
@@ -14,6 +15,7 @@
     "astro": "^5.2.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260201.0",
     "@playwright/test": "^1.51.0",
     "@tailwindcss/vite": "^4.0.0",
     "tailwindcss": "^4.0.0",

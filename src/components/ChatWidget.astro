@@ -95,9 +95,8 @@
 <script>
   // ============================================================
   // Config — see docs/chat-widget.md for the backend contract.
-  // Flip DEMO_MODE to false once the Worker routes exist.
+  // Backend: Cloudflare Worker (worker/index.ts) relays to Stuart's Telegram.
   // ============================================================
-  const DEMO_MODE = true;
   const ENDPOINTS = {
     session: '/api/chat/session',
     send: '/api/chat/send',
@@ -120,6 +119,9 @@
   let mode: Mode = 'compose';
   let sessionId: string | null = null;
   let aiHistory: { role: string; content: string }[] = [];
+  let deliveredCount = 0;
+  let awayTimer: ReturnType<typeof setTimeout> | null = null;
+  let pollTimer: ReturnType<typeof setInterval> | null = null;
 
   const PROMPTS: Record<string, { name: string; cls: string }> = {
     visitor: { name: 'you@guest', cls: 'text-terminal-orange' },
@@ -183,15 +185,9 @@
   });
 
   // ============================================================
-  // Backend adapters — demo fakes vs real fetch. Same signatures.
+  // Backend adapters
   // ============================================================
-  const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
   async function apiCreateSession(name: string, message: string) {
-    if (DEMO_MODE) {
-      await delay(900);
-      return { sessionId: 'demo-' + Math.random().toString(36).slice(2), stuartAvailable: false };
-    }
     const res = await fetch(ENDPOINTS.session, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -200,26 +196,7 @@
     return res.json();
   }
 
-  async function apiPollUntilLiveOrAway(): Promise<'live' | 'away'> {
-    if (DEMO_MODE) {
-      // Demo: Stuart is "away" after a short wait so the fallback is reviewable
-      await delay(6000);
-      return 'away';
-    }
-    const deadline = Date.now() + LIVE_WAIT_SECONDS * 1000;
-    while (Date.now() < deadline) {
-      const res = await fetch(`${ENDPOINTS.poll}?sessionId=${sessionId}`);
-      const data = await res.json();
-      for (const m of data.newMessages ?? []) addLine('stuart', m.text);
-      if (data.status === 'live') return 'live';
-      if (data.status === 'away') return 'away';
-      await delay(POLL_INTERVAL_MS);
-    }
-    return 'away';
-  }
-
   async function apiSendLive(message: string) {
-    if (DEMO_MODE) return;
     await fetch(ENDPOINTS.send, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -229,18 +206,6 @@
 
   async function apiAskAI(message: string): Promise<string> {
     aiHistory.push({ role: 'user', content: message });
-    if (DEMO_MODE) {
-      await delay(1200);
-      const canned = [
-        "Stuart has spent 15+ years across full-stack development, automation, and IT. Ask me about his projects, stack, or experience.",
-        "One highlight: he built a Claude-powered lead analysis tool that lifted qualified leads by about 40%. The write-up is on the Work page.",
-        "His core stack is JavaScript/TypeScript, PHP, and Python, with React, AWS, and a deep RPA background (UiPath).",
-        "For anything specific, the Contact page reaches him directly. He usually replies within a day.",
-      ];
-      const reply = canned[Math.min(aiHistory.filter((m) => m.role === 'user').length - 1, canned.length - 1)];
-      aiHistory.push({ role: 'assistant', content: reply });
-      return reply;
-    }
     const res = await fetch(ENDPOINTS.ai, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -252,9 +217,47 @@
   }
 
   // ============================================================
+  // Polling — runs for the life of the chat once a session exists, so
+  // Stuart's Telegram replies keep arriving whether we're still waiting
+  // on his first reply or already live.
+  // ============================================================
+  function goLive() {
+    if (mode === 'live') return;
+    if (mode === 'ai' || mode === 'ai-offer') addLine('system', 'stuart is here now.');
+    if (awayTimer) {
+      clearTimeout(awayTimer);
+      awayTimer = null;
+    }
+    mode = 'live';
+    hint.textContent = 'you are chatting live with Stuart';
+  }
+
+  async function pollOnce() {
+    if (!sessionId) return;
+    try {
+      const res = await fetch(`${ENDPOINTS.poll}?sessionId=${sessionId}&after=${deliveredCount}`);
+      const data = await res.json();
+      const newMessages = data.newMessages ?? [];
+      if (newMessages.length > 0) {
+        for (const m of newMessages) addLine('stuart', m.text);
+        deliveredCount += newMessages.length;
+      }
+      if (newMessages.length > 0 || data.status === 'live') goLive();
+    } catch {
+      // Transient network error — the next tick retries.
+    }
+  }
+
+  function startPolling() {
+    if (pollTimer) return;
+    pollTimer = setInterval(pollOnce, POLL_INTERVAL_MS);
+  }
+
+  // ============================================================
   // Flow
   // ============================================================
   function enterAIMode() {
+    if (mode === 'live') return;
     mode = 'ai';
     hint.textContent = 'AI responses are generated. For the real Stuart, use the Contact page.';
     addLine('ai', "[AI] Hi, I'm an assistant that knows Stuart's work. What would you like to know?");
@@ -262,6 +265,7 @@
   }
 
   function offerAI() {
+    if (mode !== 'waiting') return;
     mode = 'ai-offer';
     addLine('system', 'stuart is away_from_keyboard. your message reached his phone.');
     addLine('system', 'in the meantime, want to ask an AI about his experience?');
@@ -289,13 +293,8 @@
       status.textContent = 'delivered. waiting to see if stuart is around...';
       mode = 'waiting';
       hint.textContent = "you can keep typing, he'll get it all";
-      const outcome = await apiPollUntilLiveOrAway();
-      if (outcome === 'live') {
-        mode = 'live';
-        hint.textContent = 'you are chatting live with Stuart';
-      } else {
-        offerAI();
-      }
+      startPolling();
+      awayTimer = setTimeout(offerAI, LIVE_WAIT_SECONDS * 1000);
       return;
     }
 

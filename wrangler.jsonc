@@ -1,7 +1,12 @@
 {
-  "name": "stuart-bingham",
+  "name": "portfolio",
   "compatibility_date": "2026-02-01",
+  "main": "worker/index.ts",
   "assets": {
-    "directory": "./dist"
-  }
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "kv_namespaces": [
+    { "binding": "CHAT_KV", "id": "ac3c3bdb70e34fdaa93d55f9d75998b8" }
+  ]
 }

@@ -1,83 +1,127 @@
 # Chat Widget — Architecture & Integration Guide
 
 The site ships a "Chat with me" widget (`src/components/ChatWidget.astro`), styled as an
-Ubuntu terminal window. **The UI/flow is fully built; the backend is intentionally
-stubbed** (`DEMO_MODE = true`) so the design can be reviewed and approved first.
+Ubuntu terminal window, backed by a Cloudflare Worker (`worker/`) that relays messages
+to **a single Telegram chat** — Stuart's own DM with his bot. He replies directly in
+Telegram; the widget polls for replies and shows them live.
 
 ## Visitor flow
 
 1. Visitor clicks the floating `$ chat` button (bottom-right) → terminal window opens.
 2. Widget asks for a name and message ("Stuart gets a text when you send this").
-3. On send:
-   - **Live path:** message goes to the backend, which texts Stuart. The widget polls
-     for his reply for `LIVE_WAIT_SECONDS` (default 90s) showing a waiting state.
-   - **Stuart replies** → live chat continues in the same window.
-   - **No reply in time / Stuart marked away** → widget offers the fallback:
-     *"Stuart seems to be away from his terminal. Want to chat with an AI that knows
-     his work? Your message is already in his inbox either way."*
-4. AI mode: visitor chats with an AI persona that answers questions about Stuart's
-   experience, projects, and skills (grounded in the site content). Clearly labeled as AI.
+3. On send, the Worker creates a session and forwards the message to Stuart's Telegram.
+   The widget starts polling and shows a waiting state.
+4. **Stuart replies in Telegram** (see "Replying" below) → his reply appears in the
+   widget within a few seconds, and the chat is now "live" — polling continues for the
+   rest of the conversation, not just the first reply.
+5. **No reply within `LIVE_WAIT_SECONDS` (default 90s)** → the widget offers a fallback:
+   *"Stuart seems to be away from his terminal. Want to chat with an AI that knows
+   his work? Your message is already in his inbox either way."* If Stuart replies later,
+   even mid-AI-chat, his message still comes through and the widget switches back to live.
+6. AI mode: visitor chats with a small AI persona. **Currently a canned/rotating
+   response** (`worker/chatAi.ts`), not a real model — same UX as the original design
+   demo, just served from the Worker. Swapping in a real Claude call is a contained
+   follow-up (see "AI fallback" below); the frontend contract doesn't change.
 
-## Frontend contract (already implemented)
+## Replying in Telegram
+
+Because one Telegram chat can be relaying several visitor conversations at once, **you
+must use Telegram's native Reply gesture** (long-press or swipe → Reply) on the specific
+visitor message you're answering. The bot matches your reply to the right session by
+Telegram message ID. If you send a plain message with no reply-to, the bot won't guess —
+it'll nudge you: *"↩️ Reply to the visitor's message so I know who this is for."*
+
+All of a visitor's messages thread under the first message the bot sent for that
+session, so replying to any message in that thread routes correctly.
+
+## Frontend contract
 
 All backend interaction goes through four endpoints, configured at the top of
 `ChatWidget.astro`:
 
-| Endpoint | Method | Body | Returns |
+| Endpoint | Method | Body / Query | Returns |
 |---|---|---|---|
 | `/api/chat/session` | POST | `{ name, message }` | `{ sessionId, stuartAvailable }` |
 | `/api/chat/send` | POST | `{ sessionId, message }` | `{ ok }` |
-| `/api/chat/poll` | GET | `?sessionId=` | `{ messages: [{from: 'stuart'\|'visitor', text, ts}], status: 'waiting'\|'live'\|'away' }` |
+| `/api/chat/poll` | GET | `?sessionId=&after=<n>` | `{ newMessages: [{text, ts}], status: 'waiting'\|'live' }` |
 | `/api/chat/ai` | POST | `{ sessionId, messages: [{role, content}] }` | `{ reply }` |
 
-While `DEMO_MODE = true`, the widget fakes all four (simulated delays, a scripted
-"away" result, and canned AI replies) so the full flow is clickable.
+`after` is a count of Stuart-authored messages the client has already rendered — the
+Worker returns only messages past that count, so the widget's poll loop can run
+continuously without re-showing old messages. The client-side poll loop
+(`ChatWidget.astro`) runs for the life of the chat, not just the initial wait, so
+`status` only ever needs to report `'waiting'` or `'live'` — a timeout with no reply is
+handled client-side (that's the AI-offer trigger), the server never needs to say "away".
 
-## Backend integration (to build later)
+## Architecture
 
-The site deploys to **Cloudflare Workers Static Assets**, so the natural home for the
-backend is the same Worker: add routes under `/api/chat/*` in a Worker script and flip
-`DEMO_MODE` to `false`. Session state fits in **Workers KV** (or Durable Objects if we
-want true push instead of polling).
+The site deploys as a Cloudflare Worker with static assets (`wrangler.jsonc`):
+`worker/index.ts` handles `/api/*` routes and falls through to `env.ASSETS.fetch()` for
+everything else (the built Astro site).
 
-### 1. Text-message notification (the "contact Stuart" piece)
+- `worker/index.ts` — router: `/api/chat/session`, `/api/chat/send`, `/api/chat/poll`,
+  `/api/chat/ai`, and `/api/telegram/webhook`.
+- `worker/telegram.ts` — thin Telegram Bot API client (`sendMessage`, webhook secret
+  verification).
+- `worker/store.ts` — Workers KV session store. Each session is one JSON blob at
+  `session:<id>` (name, status, message log, root Telegram message id); `tg:<messageId>`
+  keys map a Telegram message back to a session id for reply routing (30-day TTL). Also
+  holds a coarse per-IP daily rate limit counter for `/api/chat/session`.
+- `worker/chatAi.ts` — canned AI-fallback replies (see above).
 
-Options, in order of recommendation:
+KV reads/writes are read-modify-write, not atomic — fine at personal-portfolio traffic
+where a given session's writes are effectively sequential.
 
-- **Twilio SMS** (~$0.008/msg): Worker calls Twilio's REST API with Stuart's number.
-  Reply-to-chat: a Twilio webhook posts his SMS reply back to the Worker, which stores
-  it for the widget's poll. This gives real two-way text↔web chat.
-- **Email-to-SMS gateway** (free, one-way): e.g. `number@txt.att.net` via an email API
-  (MailChannels is free from Workers). Stuart gets notified but replies via a link.
-- **Push via ntfy.sh** (free): Stuart installs the ntfy app; Worker POSTs to his topic.
-  The notification deep-links to a lightweight reply page.
+### Telegram setup (one-time, manual)
 
-Secrets (Twilio SID/token, Stuart's number) live in Worker env vars via
-`wrangler secret put` — never in the repo or client code.
+1. **Create the bot**: message [@BotFather](https://t.me/BotFather) on Telegram,
+   `/newbot`, follow the prompts. It gives you a token like `123456:ABC-...`.
+2. **Get your chat id**: send your new bot any message (it won't reply yet — that's
+   expected). Then visit
+   `https://api.telegram.org/bot<TOKEN>/getUpdates` in a browser and find
+   `message.chat.id` in the response — that's your `TELEGRAM_CHAT_ID`.
+3. **Generate a webhook secret**: `openssl rand -hex 32` — this becomes
+   `TELEGRAM_WEBHOOK_SECRET`, used to verify incoming webhook calls are really from
+   Telegram.
+4. **Create the KV namespace**:
+   ```
+   npx wrangler kv namespace create CHAT_KV
+   ```
+   Paste the returned `id` into `wrangler.jsonc` under `kv_namespaces`.
+5. **Set the secrets** (never commit these):
+   ```
+   npx wrangler secret put TELEGRAM_BOT_TOKEN
+   npx wrangler secret put TELEGRAM_CHAT_ID
+   npx wrangler secret put TELEGRAM_WEBHOOK_SECRET
+   ```
+6. **Deploy**: `npm run deploy`.
+7. **Register the webhook** (after the first deploy, so the URL exists):
+   ```
+   curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://stuartbingham.net/api/telegram/webhook&secret_token=<WEBHOOK_SECRET>"
+   ```
 
-### 2. AI fallback
+For local testing, `.dev.vars` (gitignored) can hold the same three variables for
+`wrangler dev`. Plain `astro dev` doesn't run the Worker, so `/api/*` calls will 404
+there — use `npm run dev:worker` (`astro build && wrangler dev`) for full-stack local
+testing.
 
-Two viable paths (both proxied through the Worker — **the API key or model endpoint is
-never exposed client-side**):
+### AI fallback
 
-- **Claude API** (recommended): Worker route `/api/chat/ai` calls Anthropic's Messages
-  API. A small fast model (Haiku-class) is the right fit for a persona chat: cheap,
-  fast, plenty smart for Q&A over a fixed bio. System prompt = Stuart's bio, resume
-  facts, and case studies (source it from `intake/` content at build time), plus rules:
-  only discuss Stuart's professional background, direct anything else to the contact
-  page, never invent facts. Budget note: with max_tokens capped at ~500 and a
-  rate limit per IP (Workers KV counter), cost is effectively pocket change.
-- **Self-hosted**: any OpenAI-compatible endpoint (Ollama on a VPS, etc.). Same Worker
-  route, different upstream URL. Cheaper at volume, but adds a server to babysit and
-  a cold-start/latency tradeoff. Fine to swap in later; the widget contract is
-  identical.
+`/api/chat/ai` currently returns a canned, rotating reply — no external API call. To
+upgrade to a real model: call Anthropic's Messages API (Haiku-class model is plenty for
+Q&A over a fixed bio) from `worker/chatAi.ts`, with a system prompt built from
+`intake/` content, `max_tokens` capped (~500), and a per-IP rate limit. The Worker
+already proxies every AI call server-side, so the API key would never touch the client.
+Same request/response contract — no frontend change needed.
 
-### 3. Abuse guardrails (needed before going live)
+### Abuse guardrails
 
-- Rate-limit `/api/chat/session` and `/api/chat/ai` per IP (KV counter or Turnstile).
-- Cap message length (widget already enforces 1000 chars client-side; enforce server-side too).
-- Cloudflare Turnstile on session creation if SMS spam becomes a problem (CSP already
-  allows challenges.cloudflare.com).
+- `/api/chat/session` is rate-limited per IP (20/day via a KV counter). Tune
+  `RATE_LIMIT_PER_DAY` in `worker/store.ts` if needed.
+- Message length is capped at 1000 chars both client-side (widget) and server-side
+  (`worker/index.ts`).
+- Cloudflare Turnstile on session creation is still an option if spam becomes a problem
+  (CSP already allows `challenges.cloudflare.com`) — not implemented yet.
 
 ## Design notes
 
