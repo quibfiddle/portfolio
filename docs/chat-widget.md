@@ -63,14 +63,16 @@ everything else (the built Astro site).
   `/api/chat/ai`, and `/api/telegram/webhook`.
 - `worker/telegram.ts` — thin Telegram Bot API client (`sendMessage`, webhook secret
   verification).
-- `worker/store.ts` — Workers KV session store. Each session is one JSON blob at
-  `session:<id>` (name, status, message log, root Telegram message id); `tg:<messageId>`
-  keys map a Telegram message back to a session id for reply routing (30-day TTL). Also
-  holds a coarse per-IP daily rate limit counter for `/api/chat/session`.
+- `worker/chatHub.ts` — a single global **Durable Object** (`ChatHub`, accessed via
+  `env.CHAT_HUB.idFromName('singleton')`) holding all session state: message logs,
+  the Telegram-message-id → session-id routing map, and per-IP rate limit counters.
+  Sessions were originally stored in Workers KV, but KV is only *eventually*
+  consistent — writes from the webhook can take up to ~60s to propagate to the edge
+  location serving a visitor's poll requests, which was measured live (a reply took
+  ~30s to show up). A Durable Object is strongly consistent and single-threaded per
+  instance, so a reply is visible on the very next poll. One instance is plenty at
+  personal-portfolio traffic.
 - `worker/chatAi.ts` — canned AI-fallback replies (see above).
-
-KV reads/writes are read-modify-write, not atomic — fine at personal-portfolio traffic
-where a given session's writes are effectively sequential.
 
 ### Telegram setup (one-time, manual)
 
@@ -83,19 +85,14 @@ where a given session's writes are effectively sequential.
 3. **Generate a webhook secret**: `openssl rand -hex 32` — this becomes
    `TELEGRAM_WEBHOOK_SECRET`, used to verify incoming webhook calls are really from
    Telegram.
-4. **Create the KV namespace**:
-   ```
-   npx wrangler kv namespace create CHAT_KV
-   ```
-   Paste the returned `id` into `wrangler.jsonc` under `kv_namespaces`.
-5. **Set the secrets** (never commit these):
+4. **Set the secrets** (never commit these):
    ```
    npx wrangler secret put TELEGRAM_BOT_TOKEN
    npx wrangler secret put TELEGRAM_CHAT_ID
    npx wrangler secret put TELEGRAM_WEBHOOK_SECRET
    ```
-6. **Deploy**: `npm run deploy`.
-7. **Register the webhook** (after the first deploy, so the URL exists):
+5. **Deploy**: `npm run deploy`.
+6. **Register the webhook** (after the first deploy, so the URL exists):
    ```
    curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://stuartbingham.net/api/telegram/webhook&secret_token=<WEBHOOK_SECRET>"
    ```
@@ -116,8 +113,8 @@ Same request/response contract — no frontend change needed.
 
 ### Abuse guardrails
 
-- `/api/chat/session` is rate-limited per IP (20/day via a KV counter). Tune
-  `RATE_LIMIT_PER_DAY` in `worker/store.ts` if needed.
+- `/api/chat/session` is rate-limited per IP (20/day, tracked in the `ChatHub` Durable
+  Object). Tune `RATE_LIMIT_PER_DAY` in `worker/chatHub.ts` if needed.
 - Message length is capped at 1000 chars both client-side (widget) and server-side
   (`worker/index.ts`).
 - Cloudflare Turnstile on session creation is still an option if spam becomes a problem
