@@ -1,17 +1,10 @@
-import type { Env, TelegramUpdate } from './telegram';
+import type { Env } from './env';
+import type { TelegramUpdate } from './telegram';
 import { sendTelegramMessage, verifyWebhookSecret } from './telegram';
-import {
-  appendStuartMessage,
-  appendVisitorMessage,
-  checkAndBumpRateLimit,
-  createSession,
-  getSession,
-  getSessionIdByTelegramMessageId,
-  mapTelegramMessage,
-  setRootTgMessageId,
-  shortId,
-} from './store';
 import { getCannedReply, type AiMessage } from './chatAi';
+import { ChatHub } from './chatHub';
+
+export { ChatHub };
 
 function jsonResponse(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -22,6 +15,15 @@ function jsonResponse(data: unknown, status = 200): Response {
 
 function jsonError(message: string, status: number): Response {
   return jsonResponse({ error: message }, status);
+}
+
+function getHub(env: Env) {
+  const id = env.CHAT_HUB.idFromName('singleton');
+  return env.CHAT_HUB.get(id);
+}
+
+function shortId(sessionId: string): string {
+  return sessionId.slice(0, 8);
 }
 
 async function handleSession(request: Request, env: Env): Promise<Response> {
@@ -35,14 +37,15 @@ async function handleSession(request: Request, env: Env): Promise<Response> {
   const message = (body.message ?? '').trim().slice(0, 1000);
   if (!name || !message) return jsonError('name and message are required', 400);
 
+  const hub = getHub(env);
   const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
-  const allowed = await checkAndBumpRateLimit(env, ip);
+  const allowed = await hub.checkAndBumpRateLimit(ip);
   if (!allowed) return jsonError('Too many chat sessions today — try again tomorrow', 429);
 
-  const { sessionId } = await createSession(env, name, message);
+  const sessionId = await hub.createSession(name, message);
   const tgMessage = await sendTelegramMessage(env, `\u{1F4AC} ${name}\n${message}\n\nSession: ${shortId(sessionId)}`);
-  await setRootTgMessageId(env, sessionId, tgMessage.message_id);
-  await mapTelegramMessage(env, tgMessage.message_id, sessionId);
+  await hub.setRootTgMessageId(sessionId, tgMessage.message_id);
+  await hub.mapTelegramMessage(tgMessage.message_id, sessionId);
 
   return jsonResponse({ sessionId, stuartAvailable: false });
 }
@@ -58,12 +61,13 @@ async function handleSend(request: Request, env: Env): Promise<Response> {
   const message = (body.message ?? '').trim().slice(0, 1000);
   if (!sessionId || !message) return jsonError('sessionId and message are required', 400);
 
-  const session = await getSession(env, sessionId);
+  const hub = getHub(env);
+  const session = await hub.getSession(sessionId);
   if (!session) return jsonError('Unknown session', 404);
 
-  await appendVisitorMessage(env, sessionId, message);
+  await hub.appendVisitorMessage(sessionId, message);
   const tgMessage = await sendTelegramMessage(env, message, session.rootTgMessageId ?? undefined);
-  await mapTelegramMessage(env, tgMessage.message_id, sessionId);
+  await hub.mapTelegramMessage(tgMessage.message_id, sessionId);
 
   return jsonResponse({ ok: true });
 }
@@ -74,7 +78,8 @@ async function handlePoll(request: Request, env: Env): Promise<Response> {
   const after = Number(url.searchParams.get('after') ?? '0');
   if (!sessionId) return jsonError('sessionId is required', 400);
 
-  const session = await getSession(env, sessionId);
+  const hub = getHub(env);
+  const session = await hub.getSession(sessionId);
   if (!session) return jsonError('Unknown session', 404);
 
   const stuartMessages = session.messages.filter((m) => m.from === 'stuart');
@@ -114,20 +119,21 @@ async function handleWebhook(request: Request, env: Env): Promise<Response> {
       return new Response('OK');
     }
 
+    const hub = getHub(env);
     const replyToId = message.reply_to_message?.message_id;
     if (!replyToId) {
       await sendTelegramMessage(env, "↩️ Reply to the visitor's message so I know who this is for.");
       return new Response('OK');
     }
 
-    const sessionId = await getSessionIdByTelegramMessageId(env, replyToId);
+    const sessionId = await hub.getSessionIdByTelegramMessageId(replyToId);
     if (!sessionId) {
       await sendTelegramMessage(env, "Couldn't find that conversation — it may have expired.", message.message_id);
       return new Response('OK');
     }
 
-    await appendStuartMessage(env, sessionId, message.text);
-    await mapTelegramMessage(env, message.message_id, sessionId);
+    await hub.appendStuartMessage(sessionId, message.text);
+    await hub.mapTelegramMessage(message.message_id, sessionId);
   } catch (err) {
     console.error('Telegram webhook handling failed', err);
   }

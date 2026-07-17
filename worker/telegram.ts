@@ -1,10 +1,4 @@
-export interface Env {
-  ASSETS: Fetcher;
-  CHAT_KV: KVNamespace;
-  TELEGRAM_BOT_TOKEN: string;
-  TELEGRAM_CHAT_ID: string;
-  TELEGRAM_WEBHOOK_SECRET: string;
-}
+import type { Env } from './env';
 
 interface TelegramMessage {
   message_id: number;

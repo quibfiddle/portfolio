@@ -6,7 +6,12 @@
     "directory": "./dist",
     "binding": "ASSETS"
   },
-  "kv_namespaces": [
-    { "binding": "CHAT_KV", "id": "ac3c3bdb70e34fdaa93d55f9d75998b8" }
+  "durable_objects": {
+    "bindings": [
+      { "name": "CHAT_HUB", "class_name": "ChatHub" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["ChatHub"] }
   ]
 }
