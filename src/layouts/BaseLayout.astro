@@ -1,0 +1,122 @@
+---
+import '../styles/global.css';
+import SEOHead from '../components/SEOHead.astro';
+import StructuredData from '../components/StructuredData.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ChatWidget from '../components/ChatWidget.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = 'Stuart Bingham, full-stack developer and IT professional in Chandler, AZ. 15+ years across web development, automation, and infrastructure.',
+  image,
+  noindex = false,
+} = Astro.props;
+
+// Site-wide structured data
+const personData = {
+  name: 'Stuart Bingham',
+  url: Astro.site?.href,
+  jobTitle: 'Full-Stack Developer & IT Professional',
+  email: 'bingham.stuart@gmail.com',
+  telephone: '+1-480-498-8273',
+  image: new URL('/images/StuartBingham-800.jpg', Astro.site).href,
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Charity Golf Today',
+  },
+  knowsAbout: [
+    'Full-Stack Development',
+    'Workflow Automation',
+    'Robotic Process Automation',
+    'API Design',
+    'Cloud Infrastructure',
+    'DevOps',
+    'AI Integrations',
+  ],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Chandler',
+    addressRegion: 'AZ',
+    addressCountry: 'US',
+  },
+  sameAs: ['https://www.linkedin.com/in/stuart-bingham-6267356a/'],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Theme init before CSS to prevent a flash of the wrong theme -->
+    <script is:inline>
+      (function () {
+        var theme = 'dark';
+        try {
+          theme = localStorage.getItem('theme') || 'dark';
+        } catch (e) {
+          /* storage unavailable; keep default */
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+
+    <!-- Preconnect to external origins (fonts, analytics) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Google Fonts with font-display: swap for performance -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Ubuntu+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Complete Favicon Set -->
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Theme color for browser UI -->
+    <meta name="theme-color" content="#772953" />
+
+    <!-- SEO Meta Tags (includes Open Graph and Twitter Cards) -->
+    <SEOHead
+      title={title}
+      description={description}
+      image={image}
+      noindex={noindex}
+    />
+
+    <!-- Person Structured Data (site-wide) -->
+    <StructuredData type="Person" data={personData} />
+  </head>
+  <body class="bg-bg text-text antialiased">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-accent-600 focus:px-5 focus:py-2.5 focus:text-sm focus:font-bold focus:text-white"
+    >
+      Skip to content
+    </a>
+
+    <Header />
+
+    <div class="flex min-h-screen flex-col pt-14 lg:ml-64 lg:pt-0">
+      <main id="main-content" class="flex-1">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+
+    <ChatWidget />
+  </body>
+</html>

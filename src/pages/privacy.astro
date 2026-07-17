@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const contactEmail = 'bingham.stuart@gmail.com';
+const lastUpdated = 'July 16, 2026';
+---
+
+<BaseLayout
+  title="Privacy Policy | Stuart Bingham"
+  description="How stuartbingham.net handles your information: no analytics, no tracking cookies, and messages used only to reply to you."
+>
+  <section class="mx-auto max-w-3xl px-4 py-16">
+    <p class="kicker mb-3">LEGAL</p>
+    <h1 class="mb-4">Privacy Policy</h1>
+    <p class="mono-label mb-10 text-text-muted">[ last updated: {lastUpdated} ]</p>
+
+    <div class="space-y-8 text-text">
+      <div>
+        <h2 class="mb-3 text-h3">The short version</h2>
+        <p class="max-w-prose">
+          This is a personal portfolio site. There are no ads, no analytics, and no tracking.
+          The only information collected is what you choose to send when you contact me, and it
+          is used only to reply to you.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="mb-3 text-h3">Information you provide</h2>
+        <p class="max-w-prose">
+          If you reach out through the contact form, the chat widget, email, or phone, I receive
+          what you send: your name, contact details, and message. The contact form opens your own
+          email app, so your message travels as ordinary email. Chat messages are delivered to me
+          as notifications so I can respond.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="mb-3 text-h3">Information collected automatically</h2>
+        <p class="max-w-prose">
+          None by this site. There are no analytics scripts and no tracking cookies. Your theme
+          preference (dark, light, or party mode) is stored in your own browser's local storage
+          and never leaves your device. The site is served by Cloudflare, which processes standard
+          server logs (like IP addresses) to deliver and protect the site; see Cloudflare's privacy
+          policy for details.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="mb-3 text-h3">Data sharing</h2>
+        <p class="max-w-prose">
+          Your information is never sold or shared, other than the service providers involved in
+          delivering messages (for example, email and SMS carriers).
+        </p>
+      </div>
+
+      <div>
+        <h2 class="mb-3 text-h3">Your rights</h2>
+        <p class="max-w-prose">
+          Want a message you sent me corrected or deleted? Just ask and it's done.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="mb-3 text-h3">Changes</h2>
+        <p class="max-w-prose">
+          If this policy changes, the update appears on this page with a new date above.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="mb-3 text-h3">Contact</h2>
+        <p class="max-w-prose">
+          Questions about any of this: <a href={`mailto:${contactEmail}`} class="font-medium text-accent-text underline-offset-4 hover:underline">{contactEmail}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

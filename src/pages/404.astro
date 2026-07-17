@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 | Page Not Found" noindex={true}>
+  <section class="flex min-h-[60vh] items-center px-4 py-11 sm:px-5 md:py-14 lg:py-20">
+    <div class="mx-auto w-full max-w-6xl">
+      <div class="mx-auto max-w-xl text-center">
+        <!-- Interactive terminal: same registry as the homepage hero -->
+        <figure
+          class="overflow-hidden rounded-lg text-left shadow-(--shadow-card)"
+          aria-label="Interactive Ubuntu terminal. Type help for commands."
+          data-terminal-404
+        >
+          <div class="relative flex h-9 items-center justify-center bg-terminal-chrome px-3">
+            <span class="font-mono text-xs text-terminal-muted">stuart@stuartbingham: ~</span>
+            <div class="term-controls absolute right-3 flex items-center gap-1.5" aria-hidden="true">
+              <div class="flex h-4 w-4 items-center justify-center rounded-full bg-(--tint-terminal-well) text-[10px] leading-none text-terminal-muted">&ndash;</div>
+              <div class="flex h-4 w-4 items-center justify-center rounded-full bg-(--tint-terminal-well) text-[8px] leading-none text-terminal-muted">&#9633;</div>
+              <div class="flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] leading-none text-white">&times;</div>
+            </div>
+          </div>
+
+          <div class="max-h-[50vh] overflow-y-auto bg-terminal p-5 font-mono text-sm leading-relaxed sm:p-6" data-term-body>
+            <div>
+              <span class="text-terminal-green">stuart@stuartbingham</span><span class="text-terminal-muted">:</span><span class="text-terminal-text">~</span><span class="text-terminal-muted">$</span>
+              <span class="text-terminal-text">cd <span id="requested-path">/this-page</span></span>
+            </div>
+            <div class="text-terminal-text">bash: cd: no such file or directory</div>
+            <div class="text-terminal-muted">lost, traveler? try 'quest'</div>
+          </div>
+        </figure>
+
+        <h1 class="mt-8">404: Page not found</h1>
+
+        <p class="mt-4 text-text-muted">
+          This directory doesn&rsquo;t exist, but the rest of the site checks out. Let&rsquo;s get you back somewhere useful.
+        </p>
+
+        <div class="mt-8">
+          <a
+            href="/"
+            class="btn-primary inline-flex items-center rounded-lg bg-accent-600 px-6 py-3 text-sm font-bold uppercase tracking-(--tracking-kicker) text-white transition hover:bg-accent-700 hover:shadow-(--shadow-glow-sm) focus-visible:shadow-(--shadow-glow-sm)"
+          >
+            Back to home
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { initTerminal } from '../scripts/terminal';
+
+  const pathEl = document.getElementById('requested-path');
+  if (pathEl) pathEl.textContent = window.location.pathname;
+
+  const card = document.querySelector<HTMLElement>('[data-terminal-404]');
+  if (card) initTerminal(card).activate();
+</script>

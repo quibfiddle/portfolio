@@ -1,0 +1,29 @@
+---
+/**
+ * StructuredData Component
+ *
+ * Generates JSON-LD structured data for SEO.
+ * Pass the appropriate schema type and data.
+ *
+ * Usage:
+ * <StructuredData type="LocalBusiness" data={{
+ *   name: "Business Name",
+ *   address: { streetAddress: "123 Main St", ... }
+ * }} />
+ */
+
+interface Props {
+  type: 'Organization' | 'LocalBusiness' | 'Person' | 'WebSite' | 'WebPage' | 'BreadcrumbList' | 'FAQPage';
+  data: Record<string, unknown>;
+}
+
+const { type, data } = Astro.props;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": type,
+  ...data,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

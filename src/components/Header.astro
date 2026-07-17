@@ -1,0 +1,261 @@
+---
+// component-builder: Header
+// Purpose: Sidebar navigation (desktop) + top bar with slide-down menu (mobile)
+
+const pathname = Astro.url.pathname;
+
+const navItems = [
+  { label: 'Home', href: '/', icon: 'home' },
+  { label: 'About', href: '/about/', icon: 'user' },
+  { label: 'Work', href: '/work/', icon: 'briefcase' },
+  { label: 'Resume', href: '/resume/', icon: 'file' },
+  { label: 'Contact', href: '/contact/', icon: 'mail' },
+] as const;
+
+const isActive = (href: string) =>
+  href === '/'
+    ? pathname === '/'
+    : pathname === href || pathname === href.slice(0, -1);
+
+const iconPaths: Record<string, string> = {
+  home: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+  file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+  mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/>',
+  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+  sun: '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
+  moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+};
+
+const icon = (name: string, cls = 'h-5 w-5') =>
+  `<svg xmlns="http://www.w3.org/2000/svg" class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name]}</svg>`;
+---
+
+<header>
+  <!-- Desktop sidebar -->
+  <div class="site-sidebar fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-border bg-surface lg:flex">
+    <a href="/" class="site-brand mx-2 mt-2 flex items-center gap-3 px-3 py-4">
+      <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent font-bold text-white" aria-hidden="true">SB</span>
+      <span class="leading-tight">
+        <span class="block font-bold text-text">Stuart Bingham</span>
+        <span class="block text-xs text-text-muted">Developer &amp; IT Pro</span>
+      </span>
+    </a>
+
+    <nav class="flex-1 overflow-y-auto px-3" aria-label="Main navigation">
+      <p class="site-nav-label mx-3 mb-2 mt-2 text-kicker font-bold uppercase tracking-(--tracking-kicker) text-text-muted">Pages</p>
+      <ul class="space-y-1">
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'nav-item flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                isActive(item.href)
+                  ? 'bg-(--tint-accent-chip) text-accent-strong'
+                  : 'text-text-muted hover:bg-inset hover:text-text',
+              ]}
+            >
+              <Fragment set:html={icon(item.icon)} />
+              {isActive(item.href) && <span class="font-mono font-bold" aria-hidden="true">&gt;</span>}
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="space-y-2 border-t border-border p-4">
+      <button
+        type="button"
+        data-theme-toggle
+        class="flex w-full items-center rounded-lg border border-border px-4 py-2 text-sm font-medium text-text-muted transition hover:border-(--tint-accent-border-strong) hover:text-accent-text hover:shadow-(--shadow-glow-sm) focus-visible:shadow-(--shadow-glow-sm)"
+      >
+        <span class="hidden items-center gap-3 dark:flex">
+          <Fragment set:html={icon('sun', 'h-4 w-4')} />
+          Light mode
+        </span>
+        <span class="flex items-center gap-3 dark:hidden party:hidden">
+          <span class="text-base leading-none" aria-hidden="true">&#x1F57A;</span>
+          Party mode
+        </span>
+        <span class="hidden items-center gap-3 party:flex">
+          <Fragment set:html={icon('moon', 'h-4 w-4')} />
+          Dark mode
+        </span>
+      </button>
+      <a
+        href="/Stuart-Bingham-Resume.pdf"
+        download
+        class="flex items-center gap-3 rounded-lg border border-border px-4 py-2 text-sm font-medium text-text-muted transition hover:border-(--tint-accent-border-strong) hover:text-accent-text hover:shadow-(--shadow-glow-sm) focus-visible:shadow-(--shadow-glow-sm)"
+      >
+        <Fragment set:html={icon('download', 'h-4 w-4')} />
+        Download Resume
+      </a>
+    </div>
+  </div>
+
+  <!-- Mobile top bar -->
+  <div class="site-mobilebar fixed inset-x-0 top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-surface px-3 lg:hidden">
+    <button
+      type="button"
+      id="nav-toggle"
+      class="flex h-11 w-11 items-center justify-center rounded-lg text-text"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      aria-label="Open menu"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="18" x2="20" y2="18" />
+      </svg>
+    </button>
+
+    <a href="/" class="site-brand flex min-w-0 flex-1 items-center gap-2.5 px-1.5 py-1">
+      <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent text-sm font-bold text-white" aria-hidden="true">SB</span>
+      <span class="truncate font-bold text-text">Stuart Bingham</span>
+    </a>
+
+    <button
+      type="button"
+      data-theme-toggle
+      class="flex h-11 w-11 items-center justify-center rounded-lg text-text-muted hover:text-accent-text"
+    >
+      <span class="hidden dark:inline-flex">
+        <Fragment set:html={icon('sun')} />
+        <span class="sr-only">Switch to light mode</span>
+      </span>
+      <span class="inline-flex dark:hidden party:hidden">
+        <span class="text-xl leading-none" aria-hidden="true">&#x1F57A;</span>
+        <span class="sr-only">Switch to party mode</span>
+      </span>
+      <span class="hidden party:inline-flex">
+        <Fragment set:html={icon('moon')} />
+        <span class="sr-only">Switch to dark mode</span>
+      </span>
+    </button>
+
+    <a
+      href="/Stuart-Bingham-Resume.pdf"
+      download
+      class="flex h-11 w-11 items-center justify-center rounded-lg text-text-muted hover:text-accent-text"
+      aria-label="Download resume"
+    >
+      <Fragment set:html={icon('download')} />
+    </a>
+  </div>
+
+  <!-- Mobile slide-down panel -->
+  <nav
+    id="mobile-nav"
+    class="fixed inset-x-0 top-14 z-30 hidden border-b border-border bg-surface shadow-(--shadow-card) lg:hidden"
+    aria-label="Mobile navigation"
+  >
+    <ul class="space-y-1 p-3">
+      {navItems.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={[
+              'nav-item flex items-center gap-3 rounded-md px-3 py-3 text-base font-medium',
+              isActive(item.href)
+                ? 'bg-(--tint-accent-chip) text-accent-strong'
+                : 'text-text-muted hover:bg-inset hover:text-text',
+            ]}
+          >
+            <Fragment set:html={icon(item.icon)} />
+            {isActive(item.href) && <span class="font-mono font-bold" aria-hidden="true">&gt;</span>}
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const panel = document.getElementById('mobile-nav');
+
+  function closeMenu() {
+    panel?.classList.add('hidden');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', 'Open menu');
+  }
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = panel ? !panel.classList.toggle('hidden') : false;
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    if (isOpen) panel?.querySelector('a')?.focus();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && panel && !panel.classList.contains('hidden')) {
+      closeMenu();
+      toggle?.focus();
+    }
+  });
+
+  panel?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) closeMenu();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (panel && !panel.classList.contains('hidden')) {
+      const target = e.target as HTMLElement;
+      if (!target.closest('#mobile-nav') && !target.closest('#nav-toggle')) closeMenu();
+    }
+  });
+
+  // Theme toggle — cycles dark -> light -> party -> dark. State lives on
+  // <html data-theme>, so all toggles stay in sync via CSS.
+  const THEME_ORDER = ['dark', 'light', 'party'];
+
+  function confettiBurst() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const colors = ['#772953', '#77216f', '#e95420', '#ff2ec4', '#2ec4ff'];
+    const box = document.createElement('div');
+    box.setAttribute('aria-hidden', 'true');
+    box.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;';
+    document.body.appendChild(box);
+    for (let i = 0; i < 80; i++) {
+      const p = document.createElement('span');
+      const size = 6 + Math.random() * 8;
+      p.style.cssText = `position:absolute;top:-20px;left:${Math.random() * 100}%;width:${size}px;height:${size * 0.6}px;background:${colors[i % colors.length]};`;
+      box.appendChild(p);
+      p.animate(
+        [
+          { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+          { transform: `translateY(${window.innerHeight + 40}px) rotate(${360 + Math.random() * 360}deg)`, opacity: 0.9 },
+        ],
+        { duration: 2000 + Math.random() * 2000, delay: Math.random() * 300, easing: 'cubic-bezier(.2,.6,.4,1)', fill: 'forwards' },
+      );
+    }
+    setTimeout(() => box.remove(), 4600);
+  }
+
+  // Single theme entry point: persists the choice and fires confetti on
+  // party entry. Exposed as window.__setTheme so the terminal's `theme`
+  // command reuses the exact same code path.
+  function setTheme(next: string) {
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      /* storage unavailable; theme still switches for this page */
+    }
+    if (next === 'party') confettiBurst();
+  }
+  (window as unknown as { __setTheme?: (t: string) => void }).__setTheme = setTheme;
+
+  document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const current = document.documentElement.dataset.theme ?? 'dark';
+      const next = THEME_ORDER[(THEME_ORDER.indexOf(current) + 1) % THEME_ORDER.length];
+      setTheme(next);
+    });
+  });
+</script>

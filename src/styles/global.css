@@ -1,0 +1,496 @@
+@import "tailwindcss";
+
+/* dark:/party: variants key off the data-theme attribute set by the head script */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant party (&:where([data-theme="party"], [data-theme="party"] *));
+
+@theme {
+  /* ============================================================
+     PRIMARY — Canonical Aubergine (#772953 = 700)
+     Brand anchors: 700 aubergine · 800 Finn · 950 Dark Aubergine
+     ============================================================ */
+  --color-primary-50:  oklch(0.977 0.013 347.9); /* #fff4f9 */
+  --color-primary-100: oklch(0.947 0.017 349.5); /* #f7e9ef */
+  --color-primary-200: oklch(0.888 0.028 352.0); /* #ead3dc */
+  --color-primary-300: oklch(0.807 0.044 349.7); /* #d7b5c4 */
+  --color-primary-400: oklch(0.704 0.063 350.3); /* #bf90a5 */
+  --color-primary-500: oklch(0.623 0.079 350.7); /* #ac738d */
+  --color-primary-600: oklch(0.547 0.093 350.2); /* #995978 */
+  --color-primary-700: oklch(0.410 0.119 350.3); /* #772953 — Canonical Aubergine */
+  --color-primary-800: oklch(0.366 0.097 338.3); /* #5e2750 — Ubuntu Finn (hover/dark) */
+  --color-primary-900: oklch(0.270 0.101 350.1); /* #47072d */
+  --color-primary-950: oklch(0.196 0.084 344.1); /* #2c001e — Dark Aubergine (= text) */
+
+  /* ============================================================
+     SECONDARY — Ubuntu Plum (#77216f = 700)
+     Gradients with primary, decorative bands only
+     ============================================================ */
+  --color-secondary-50:  oklch(0.976 0.018 331.1); /* #fff3fd */
+  --color-secondary-100: oklch(0.946 0.023 332.4); /* #f7e8f4 */
+  --color-secondary-200: oklch(0.888 0.036 331.6); /* #e9d2e5 */
+  --color-secondary-300: oklch(0.809 0.056 331.9); /* #d7b4d1 */
+  --color-secondary-400: oklch(0.704 0.081 332.2); /* #be8db6 */
+  --color-secondary-500: oklch(0.623 0.100 331.7); /* #aa70a2 */
+  --color-secondary-600: oklch(0.546 0.119 332.1); /* #98548f */
+  --color-secondary-700: oklch(0.415 0.151 331.9); /* #77216f — Ubuntu Plum */
+  --color-secondary-800: oklch(0.340 0.138 331.7); /* #5d0e57 */
+  --color-secondary-900: oklch(0.270 0.118 332.0); /* #44023f */
+  --color-secondary-950: oklch(0.211 0.095 332.3); /* #2f002b */
+
+  /* ============================================================
+     ACCENT — Ubuntu Orange (#e95420 = 500)
+     THE single accent: kickers, stat values, buttons, links,
+     active nav, chips, tinted borders
+     ============================================================ */
+  --color-accent-50:  oklch(0.977 0.012 37.4); /* #fff5f2 */
+  --color-accent-100: oklch(0.945 0.028 36.9); /* #ffe7e0 */
+  --color-accent-200: oklch(0.888 0.061 37.3); /* #ffcdbe */
+  --color-accent-300: oklch(0.809 0.111 37.8); /* #ffa78c */
+  --color-accent-400: oklch(0.703 0.174 37.6); /* #f77148 — terminal/dark-bg orange */
+  --color-accent-500: oklch(0.641 0.194 37.8); /* #e95420 — Ubuntu Orange (fills) */
+  --color-accent-600: oklch(0.563 0.178 37.8); /* #c7420f — hover + AA link text */
+  --color-accent-700: oklch(0.470 0.154 37.5); /* #9e2f03 — text on chips */
+  --color-accent-800: oklch(0.399 0.130 37.9); /* #7e2401 */
+  --color-accent-900: oklch(0.341 0.111 38.1); /* #651b00 */
+  --color-accent-950: oklch(0.271 0.088 37.5); /* #481101 */
+
+  /* ============================================================
+     NEUTRALS — Ubuntu warm-grey stack (bg → surface → inset)
+     ============================================================ */
+  --color-bg:      oklch(0.968 0.010 87.5); /* #F7F4ED — Warm Grey page background */
+  --color-surface: oklch(1.000 0.000 90.0); /* #ffffff — cards, sidebar, panels */
+  --color-inset:   oklch(0.943 0.014 88.7); /* #f0ece2 — stat-tile wells inside cards */
+  --color-border:  oklch(0.908 0.012 79.8); /* #e5e0d8 — 1px card/divider borders */
+  --color-stone:   oklch(0.732 0.014 71.3); /* #AEA79F — Light Aubergine, DECORATIVE ONLY */
+
+  /* ============================================================
+     TEXT
+     ============================================================ */
+  --color-text:       oklch(0.196 0.084 344.1); /* #2c001e — headings, body */
+  --color-text-muted: oklch(0.505 0.021 59.2);  /* #6e6259 — leads, labels, captions */
+
+  /* ============================================================
+     SEMANTIC ALIASES (what components actually use)
+     ============================================================ */
+  --color-primary:       var(--color-primary-700);  /* #772953 */
+  --color-primary-hover: var(--color-primary-800);  /* #5e2750 Finn */
+  --color-accent:        var(--color-accent-500);   /* #e95420 — fills, large text */
+  --color-accent-hover:  var(--color-accent-600);   /* #c7420f */
+  --color-accent-text:   var(--color-accent-600);   /* #c7420f — links, small orange text */
+  --color-accent-strong: var(--color-accent-700);   /* #9e2f03 — accent text on tinted chips; accent-400 in dark */
+  --color-ring:          var(--color-accent-500);   /* focus rings (3.65:1 ≥ 3:1 UI) */
+
+  --color-success:      oklch(0.534 0.167 144.3);  /* #0e8420 Ubuntu Green — fills/white bg */
+  --color-success-text: oklch(0.496 0.154 144.4);  /* #0c771d — AA text on bg AND surface */
+  --color-warning:      var(--color-accent-500);   /* #e95420 — pair with dark text */
+  --color-error:        oklch(0.530 0.204 23.6);   /* #c7162b Ubuntu Red */
+  --color-info:         var(--color-primary-700);  /* #772953 */
+
+  /* ============================================================
+     TERMINAL CARD — Ubuntu-terminal hero panel (dark set)
+     ============================================================ */
+  --color-terminal:        oklch(0.223 0.071 342.5); /* #300a24 — classic Ubuntu terminal bg */
+  --color-terminal-chrome: oklch(0.264 0.079 341.3); /* #3d1230 — title bar / window chrome */
+  --color-terminal-text:   oklch(0.968 0.010 87.5);  /* #f7f4ed — warm white body */
+  --color-terminal-muted:  oklch(0.732 0.014 71.3);  /* #AEA79F — comments, punctuation */
+  --color-terminal-green:  oklch(0.826 0.215 133.3); /* #8ae234 — prompt, keys (Tango green) */
+  --color-terminal-orange: oklch(0.703 0.174 37.6);  /* #f77148 — string values (= accent-400) */
+
+  /* ============================================================
+     TYPOGRAPHY — Ubuntu + Ubuntu Mono
+     ============================================================ */
+  --font-display: 'Ubuntu', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Ubuntu', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Ubuntu Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Fluid type scale */
+  --text-hero: clamp(2.5rem, 6vw, 3.75rem);        /* 40-60px — homepage hero name only */
+  --text-hero--line-height: 1.1;
+  --text-h1: clamp(2rem, 5vw, 2.75rem);            /* 32-44px */
+  --text-h1--line-height: 1.2;
+  --text-h2: clamp(1.75rem, 4.5vw, 2.5rem);        /* 28-40px */
+  --text-h2--line-height: 1.2;
+  --text-h3: clamp(1.125rem, 1.5vw, 1.25rem);      /* 18-20px */
+  --text-h3--line-height: 1.3;
+  --text-h4: 1rem;                                  /* 16px — card/subsection labels */
+  --text-h4--line-height: 1.4;
+  --text-lead: clamp(0.95rem, 1.4vw, 1.125rem);    /* 15.2-18px — section leads */
+  --text-lead--line-height: 1.6;
+  --text-base: 1rem;                                /* 16px body */
+  --text-base--line-height: 1.6;
+  --text-sm: 0.875rem;                              /* 14px — meta, buttons, tags */
+  --text-sm--line-height: 1.5;
+  --text-kicker: 0.75rem;                           /* 12px — section kickers, tiny labels */
+  --text-kicker--line-height: 1.2;
+
+  /* Letter spacing */
+  --tracking-heading: -0.02em;   /* h1/h2 */
+  --tracking-kicker: 0.04em;     /* uppercase kickers */
+
+  /* Spacing scale */
+  --spacing-section: 5rem;
+  --spacing-content: 2rem;
+}
+
+/* Compositional layers (alphas over varying backgrounds) — outside @theme
+   so they don't generate meaningless utilities */
+:root {
+  /* Accent tint layers — chip/border system.
+     Effective over white: chip #fce5de · border #fad4c7 · border-strong #f5b29b */
+  --tint-accent-chip:          color-mix(in srgb, var(--color-accent-500) 15%, transparent);
+  --tint-accent-border:        color-mix(in srgb, var(--color-accent-500) 25%, transparent);
+  --tint-accent-border-strong: color-mix(in srgb, var(--color-accent-500) 45%, transparent); /* card hover glow */
+
+  /* Primary tint layers — aubergine-flavored chips (e.g. info notes) */
+  --tint-primary-chip:   color-mix(in srgb, var(--color-primary-700) 12%, transparent);
+  --tint-primary-border: color-mix(in srgb, var(--color-primary-700) 25%, transparent);
+
+  /* Terminal card internals */
+  --tint-terminal-well:   color-mix(in srgb, white 8%, transparent);  /* inset zones on #300a24 */
+  --tint-terminal-border: color-mix(in srgb, white 14%, transparent); /* hairlines on the card */
+
+  /* Card shadows (soft layered pair, warmed with aubergine) */
+  --shadow-card:       0 0 2px oklch(0.196 0.084 344.1 / 0.08), 0 8px 24px -4px oklch(0.196 0.084 344.1 / 0.10);
+  --shadow-card-hover: 0 0 2px oklch(0.196 0.084 344.1 / 0.10), 0 12px 32px -4px oklch(0.196 0.084 344.1 / 0.16);
+
+  /* Luminescent hover glows (accent-tinted; brighter accent-400 set in dark) */
+  --shadow-glow:    0 0 0 1px color-mix(in srgb, var(--color-accent-500) 60%, transparent),
+                    0 0 18px color-mix(in srgb, var(--color-accent-500) 30%, transparent),
+                    0 10px 32px -4px color-mix(in srgb, var(--color-accent-500) 22%, transparent);
+  --shadow-glow-sm: 0 0 0 1px color-mix(in srgb, var(--color-accent-500) 50%, transparent),
+                    0 0 12px color-mix(in srgb, var(--color-accent-500) 28%, transparent);
+}
+
+/* ============================================================
+   DARK THEME (site default; set by the head script in BaseLayout)
+   Warm aubergine-tinted dark set — the @theme values above serve
+   as the light theme. Contrast (verified):
+   #f77148 on #241820 = 6.0:1 · on #2e2029 = 5.5:1 (AA small text)
+   #b3a8ac on #241820 = 7.4:1 (AA small text)
+   ============================================================ */
+:root[data-theme="dark"] {
+  --color-bg:      #1a1016;
+  --color-surface: #241820;
+  --color-inset:   #2e2029;
+  --color-border:  #3d2f38;
+  --color-text:    #f7f4ed;
+  --color-text-muted: #b3a8ac;
+
+  /* Orange text steps up to accent-400 on dark surfaces */
+  --color-accent-text:   var(--color-accent-400); /* #f77148 */
+  --color-accent-hover:  var(--color-accent-400);
+  --color-accent-strong: var(--color-accent-400);
+
+  /* Deeper shadows for dark surfaces */
+  --shadow-card:       0 0 2px oklch(0 0 0 / 0.5), 0 8px 24px -4px oklch(0 0 0 / 0.55);
+  --shadow-card-hover: 0 0 2px oklch(0 0 0 / 0.55), 0 12px 32px -4px oklch(0 0 0 / 0.7);
+
+  /* Neon-brighter glows for dark surfaces */
+  --shadow-glow:    0 0 0 1px color-mix(in srgb, var(--color-accent-400) 70%, transparent),
+                    0 0 24px color-mix(in srgb, var(--color-accent-400) 40%, transparent),
+                    0 12px 40px -4px color-mix(in srgb, var(--color-accent-400) 28%, transparent);
+  --shadow-glow-sm: 0 0 0 1px color-mix(in srgb, var(--color-accent-400) 60%, transparent),
+                    0 0 16px color-mix(in srgb, var(--color-accent-400) 35%, transparent);
+}
+
+/* --- Base typography ---
+   In @layer base so utility classes (text-white, text-h3, text-hero, …)
+   can override these element defaults — unlayered rules would beat the
+   entire utilities layer regardless of specificity. */
+@layer base {
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--color-text);
+    text-wrap: balance;
+  }
+
+  h1 { font-size: var(--text-h1); font-weight: 700; line-height: 1.2; letter-spacing: var(--tracking-heading); }
+  h2 { font-size: var(--text-h2); font-weight: 700; line-height: 1.2; letter-spacing: var(--tracking-heading); }
+  h3 { font-size: var(--text-h3); font-weight: 700; line-height: 1.3; }
+  h4 { font-size: var(--text-h4); font-weight: 500; line-height: 1.4; }
+
+  p { text-wrap: pretty; }
+}
+
+/* Section lead (muted paragraph under section titles) */
+.lead {
+  font-size: var(--text-lead);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  max-width: 42rem;
+}
+
+/* Kicker — bold uppercase accent label above every section title.
+   Ubuntu (display font), NOT mono. */
+.kicker {
+  font-size: var(--text-kicker);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-kicker);
+  /* accent-600: 12px text needs 4.5:1 — raw accent-500 only hits 3.3:1 on bg */
+  color: var(--color-accent-text);
+}
+
+/* Terminal-flavored mono accents ($ /route labels, > bullets, [dates], STATUS: tags) */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9375em; /* Ubuntu Mono runs slightly large; optically match body */
+}
+
+/* Focus visibility */
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   PARTY THEME — 1996 GeoCities hyperactive chaos, Ubuntu-flavored.
+   Everything scoped under [data-theme="party"]; chaos lives in
+   backgrounds/borders/decorations, text stays >= 4.5:1.
+   The global prefers-reduced-motion rule above freezes every
+   animation here, leaving a static neon palette.
+   ============================================================ */
+:root[data-theme="party"] {
+  /* Dark-ish base so all default text pairs stay readable */
+  --color-bg:      #2c001e;
+  --color-surface: #3d1230;
+  --color-inset:   #1a0413;
+  --color-border:  color-mix(in srgb, #ff2ec4 60%, transparent);
+  --color-text:    #ffffff;
+  --color-text-muted: #f5d4ec;
+
+  --color-accent-text:   #ffd93d; /* neon yellow links/labels on dark: >= 9:1 */
+  --color-accent-hover:  #ffd93d;
+  --color-accent-strong: #ffd93d;
+
+  --shadow-card:       6px 6px 0 rgb(0 0 0 / 0.85);
+  --shadow-card-hover: 8px 8px 0 rgb(0 0 0 / 0.85);
+  --shadow-glow:       0 0 0 3px #000, 0 0 24px color-mix(in srgb, #ff2ec4 60%, transparent);
+  --shadow-glow-sm:    0 0 0 2px #000, 0 0 14px color-mix(in srgb, #2ec4ff 60%, transparent);
+}
+
+/* 1. Endlessly diagonal-sliding psychedelic background */
+[data-theme="party"] body {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #2c001e 0 20px,
+    #47072d 20px 40px,
+    #77216f 40px 60px,
+    #e95420 60px 64px,
+    #47072d 64px 80px
+  );
+  animation: party-slide 20s linear infinite;
+}
+
+@keyframes party-slide {
+  to { background-position: 113px 113px; }
+}
+
+/* 2. Sidebar / mobile bar: slow-panning rainbow */
+[data-theme="party"] .site-sidebar,
+[data-theme="party"] .site-mobilebar {
+  background: linear-gradient(160deg, #77216f, #e95420, #ffd400, #2ec4ff, #ff2ec4, #77216f);
+  background-size: 300% 300%;
+  animation: party-pan 14s ease-in-out infinite alternate;
+  border-color: #000;
+}
+
+@keyframes party-pan {
+  to { background-position: 100% 100%; }
+}
+
+[data-theme="party"] .site-brand {
+  background: rgb(0 0 0 / 0.75);
+  border-radius: 0.5rem;
+}
+
+/* Keep sidebar/mobile-bar controls readable on light rainbow zones */
+[data-theme="party"] .site-sidebar [data-theme-toggle],
+[data-theme="party"] .site-sidebar a[download],
+[data-theme="party"] .site-mobilebar [data-theme-toggle],
+[data-theme="party"] .site-mobilebar a[download],
+[data-theme="party"] .site-mobilebar #nav-toggle {
+  background: rgb(0 0 0 / 0.75);
+  color: #fff;
+  border-color: #000;
+}
+
+[data-theme="party"] .site-nav-label {
+  display: inline-block;
+  background: #ffd400;
+  color: #000;
+  padding: 0.1rem 0.4rem;
+  transform: rotate(-1deg);
+}
+
+/* Nav items: hard-shadow neon blocks, black bold text, alternating tilt */
+[data-theme="party"] .nav-item {
+  color: #000;
+  font-weight: 700;
+  background: #ff2ec4;
+  border: 3px solid #000;
+  border-radius: 0.375rem;
+  box-shadow: 4px 4px 0 #000;
+  transform: rotate(-1deg);
+  margin: 0.35rem 0;
+}
+
+[data-theme="party"] li:nth-child(3n + 2) .nav-item { background: #2ec4ff; transform: rotate(1deg); }
+[data-theme="party"] li:nth-child(3n)     .nav-item { background: #ffd400; }
+
+/* li:nth-child(n) matches every item but outranks the nth-child stripe rules
+   above, so hover wins on cyan/yellow items too (they tied and lost before) */
+[data-theme="party"] .nav-item:hover,
+[data-theme="party"] .nav-item:focus-visible,
+[data-theme="party"] li:nth-child(n) .nav-item:hover,
+[data-theme="party"] li:nth-child(n) .nav-item:focus-visible {
+  color: #000;
+  background: #8ae234;
+}
+
+/* 3. Cards: tilted, 3px black border, hard offset shadow, wiggle on hover */
+[data-theme="party"] .party-card {
+  background: linear-gradient(135deg, #3d1230, #77216f 55%, #9e2f03);
+  border: 3px solid #000;
+  box-shadow: 6px 6px 0 #000;
+  transform: rotate(-1.5deg);
+}
+
+[data-theme="party"] .party-card:nth-child(even) {
+  transform: rotate(1.5deg);
+}
+
+[data-theme="party"] .party-card:hover {
+  animation: party-bounce 0.5s ease;
+  border-color: #000;
+  box-shadow: 6px 6px 0 #ff2ec4;
+}
+
+@keyframes party-bounce {
+  0%   { transform: rotate(-1.5deg) scale(1); }
+  30%  { transform: rotate(1deg) scale(1.05) translateY(-5px); }
+  60%  { transform: rotate(-1deg) scale(0.99); }
+  100% { transform: rotate(-1.5deg) scale(1.02); }
+}
+
+/* 4. Rainbow headings; hero h1 gets !!! ; kickers become highlighter marks */
+[data-theme="party"] h1,
+[data-theme="party"] h2 {
+  background: linear-gradient(90deg, #ff2ec4, #ffd400, #2ec4ff, #8ae234, #ff2ec4);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: party-rainbow 6s linear infinite;
+}
+
+[data-theme="party"] h1::after {
+  content: '!!!';
+}
+
+@keyframes party-rainbow {
+  to { background-position: 400% 0; }
+}
+
+[data-theme="party"] .kicker {
+  display: inline-block;
+  background: #ffd400;
+  color: #000;
+  padding: 0.1rem 0.45rem;
+  transform: rotate(-1deg);
+}
+
+/* 5. Stat tiles: green LED style */
+[data-theme="party"] .stat-tile {
+  background: #000;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0 #2ec4ff;
+}
+
+[data-theme="party"] .stat-tile p {
+  color: #8ae234;
+  font-family: var(--font-mono);
+  text-shadow: 0 0 8px rgb(138 226 52 / 0.7);
+}
+
+/* 6. Footer LED widgets (visitor counter + clock; markup is party-only) */
+.party-led {
+  display: inline-block;
+  background: #000;
+  color: #8ae234;
+  font-family: var(--font-mono);
+  border: 2px solid #8ae234;
+  padding: 0.15rem 0.5rem;
+  text-shadow: 0 0 6px rgb(138 226 52 / 0.7);
+}
+
+/* 7. Terminal card: slow hue-cycle + spinning window dots */
+[data-theme="party"] [data-terminal-card] {
+  border: 3px solid #000;
+  box-shadow: 6px 6px 0 #000;
+  animation: party-hue 10s linear infinite;
+}
+
+@keyframes party-hue {
+  from { filter: hue-rotate(0deg); }
+  to   { filter: hue-rotate(360deg); }
+}
+
+[data-theme="party"] .term-controls > div {
+  animation: party-spin 3s linear infinite;
+}
+
+@keyframes party-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 9. Primary buttons: pulsing neon (~0.7Hz) + blinking NEW!!! chip (1Hz) */
+[data-theme="party"] .btn-primary {
+  border: 3px solid #000;
+  animation: party-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes party-pulse {
+  0%, 100% { box-shadow: 4px 4px 0 #000, 0 0 10px rgb(255 46 196 / 0.5); }
+  50%      { box-shadow: 4px 4px 0 #000, 0 0 26px rgb(255 46 196 / 0.95); }
+}
+
+.party-new {
+  background: #ffd400;
+  color: #000;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.05rem 0.35rem;
+  border: 2px solid #000;
+  transform: rotate(3deg);
+  animation: party-blink 1s steps(1) infinite; /* 1Hz, under the 3Hz flash limit */
+}
+
+@keyframes party-blink {
+  50% { opacity: 0; }
+}

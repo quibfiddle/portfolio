@@ -1,0 +1,212 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const stats = [
+  { value: 'Chandler, AZ', label: 'Based in' },
+  { value: '< 24h', label: 'Usual reply time' },
+  { value: '15+ yrs', label: 'Experience' },
+];
+
+const fastPaths = [
+  {
+    kicker: 'EMAIL',
+    name: 'bingham.stuart@gmail.com',
+    href: 'mailto:bingham.stuart@gmail.com',
+    external: false,
+    note: 'best for anything detailed',
+  },
+  {
+    kicker: 'LINKEDIN',
+    name: 'in/stuart-bingham',
+    href: 'https://www.linkedin.com/in/stuart-bingham-6267356a/',
+    external: true,
+    note: 'connect or message',
+  },
+  {
+    kicker: 'PHONE',
+    name: '(480) 498-8273',
+    href: 'tel:+14804988273',
+    external: false,
+    note: 'call or text',
+  },
+];
+---
+
+<BaseLayout
+  title="Contact | Stuart Bingham, Developer & IT Pro in Chandler AZ"
+  description="Get in touch with Stuart Bingham: email, LinkedIn, or phone. Based in Chandler, AZ, open to relocation and remote work, and usually replies within 24 hours."
+>
+  <section class="px-4 py-11 sm:px-5 md:py-14 lg:py-20" aria-labelledby="contact-heading">
+    <div class="mx-auto max-w-6xl">
+      <div class="text-center">
+        <p class="kicker">Connect</p>
+        <h1 id="contact-heading" class="mt-2">Get in touch</h1>
+        <p class="lead mx-auto mt-4">
+          Got a role, a legacy platform, or a workflow begging to be automated? Pick a channel; they all
+          reach the same person.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-6 lg:grid-cols-[3fr_2fr]">
+        <!-- Left: main card -->
+        <div class="party-card rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card) sm:p-8">
+          <p class="flex items-center gap-2.5">
+            <span class="relative flex h-2.5 w-2.5" aria-hidden="true">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-60"></span>
+              <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-success"></span>
+            </span>
+            <span class="font-mono text-kicker font-bold uppercase tracking-(--tracking-kicker) text-text"><span aria-hidden="true">[ </span>STATUS: OPEN_TO_OPPORTUNITIES<span aria-hidden="true"> ]</span></span>
+          </p>
+
+          <h2 class="mt-4">Let&rsquo;s talk shop</h2>
+
+          <p class="mt-4 text-text-muted">
+            I&rsquo;m open to software developer, automation developer, and IT infrastructure roles.
+            Based in Chandler, AZ and open to relocation and remote work. If you&rsquo;d rather start
+            with a project conversation than a job description, that works too.
+          </p>
+
+          <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {stats.map((stat) => (
+              <div class="stat-tile rounded-xl border border-border bg-inset p-4">
+                <p class="text-lg font-bold text-accent-hover">{stat.value}</p>
+                <p class="mt-0.5 text-kicker font-medium uppercase tracking-(--tracking-kicker) text-text-muted">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <a
+              href="mailto:bingham.stuart@gmail.com"
+              class="btn-primary inline-flex items-center rounded-lg bg-accent-600 px-6 py-3 text-sm font-bold uppercase tracking-(--tracking-kicker) text-white transition hover:bg-accent-700 hover:shadow-(--shadow-glow-sm) focus-visible:shadow-(--shadow-glow-sm)"
+            >
+              Email me
+            </a>
+            <a
+              href="https://www.linkedin.com/in/stuart-bingham-6267356a/"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center rounded-lg border border-border bg-surface px-6 py-3 text-sm font-bold uppercase tracking-(--tracking-kicker) text-text transition hover:border-(--tint-accent-border-strong) hover:text-accent-text hover:shadow-(--shadow-glow-sm) focus-visible:shadow-(--shadow-glow-sm)"
+            >
+              Connect on LinkedIn<span class="sr-only"> (opens in new tab)</span>
+            </a>
+          </div>
+
+          <p class="mono-label mt-5">
+            <a href="tel:+14804988273" class="text-accent-text hover:underline">
+              <span aria-hidden="true">$</span> call (480) 498-8273
+            </a>
+          </p>
+        </div>
+
+        <!-- Right: fast paths -->
+        <div class="space-y-4">
+          <p class="mono-label font-bold text-text-muted">&gt; FAST_PATHS</p>
+          {fastPaths.map((path) => (
+            <a
+              href={path.href}
+              target={path.external ? '_blank' : undefined}
+              rel={path.external ? 'noopener' : undefined}
+              class="party-card block rounded-xl border border-border bg-surface p-5 shadow-(--shadow-card) transition duration-200 hover:-translate-y-0.5 hover:border-(--tint-accent-border-strong) hover:shadow-(--shadow-glow)"
+            >
+              <p class="kicker">{path.kicker}</p>
+              <p class="mt-1 font-bold text-text">
+                {path.name}
+                {path.external && <span class="sr-only"> (opens in new tab)</span>}
+              </p>
+              <p class="mono-label mt-1 text-text-muted">{path.note}</p>
+            </a>
+          ))}
+
+          <button
+            type="button"
+            id="chat-fast-path"
+            class="party-card block w-full rounded-xl border border-border bg-surface p-5 text-left shadow-(--shadow-card) transition duration-200 hover:-translate-y-0.5 hover:border-(--tint-accent-border-strong) hover:shadow-(--shadow-glow)"
+          >
+            <p class="kicker">$ CHAT</p>
+            <p class="mt-1 font-bold text-text">Chat with the site</p>
+            <p class="mono-label mt-1 text-text-muted" id="chat-fast-path-note">opens the chat widget</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contact form -->
+      <div class="party-card mx-auto mt-10 max-w-2xl rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card) sm:p-8">
+        <p class="mono-label font-bold text-text-muted">&gt; SEND_A_MESSAGE</p>
+        <form id="contact-form" class="mt-5 space-y-5">
+          <div>
+            <label for="cf-name" class="block text-sm font-bold text-text">Name</label>
+            <input
+              type="text"
+              id="cf-name"
+              name="name"
+              required
+              autocomplete="name"
+              class="mt-1.5 w-full rounded-lg border border-text-muted bg-surface px-4 py-2.5 text-base text-text"
+            />
+          </div>
+          <div>
+            <label for="cf-email" class="block text-sm font-bold text-text">Email</label>
+            <input
+              type="email"
+              id="cf-email"
+              name="email"
+              required
+              autocomplete="email"
+              class="mt-1.5 w-full rounded-lg border border-text-muted bg-surface px-4 py-2.5 text-base text-text"
+            />
+          </div>
+          <div>
+            <label for="cf-message" class="block text-sm font-bold text-text">Message</label>
+            <textarea
+              id="cf-message"
+              name="message"
+              rows="5"
+              required
+              class="mt-1.5 w-full rounded-lg border border-text-muted bg-surface px-4 py-2.5 text-base text-text"
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="btn-primary inline-flex items-center rounded-lg bg-accent-600 px-6 py-3 text-sm font-bold uppercase tracking-(--tracking-kicker) text-white transition hover:bg-accent-700 hover:shadow-(--shadow-glow-sm) focus-visible:shadow-(--shadow-glow-sm)"
+          >
+            Send message
+          </button>
+          <p class="text-sm text-text-muted">
+            <span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> The form opens your mail app. Direct sending is coming with the chat feature.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Form → prefilled mailto (works with zero backend)
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const name = String(data.get('name') ?? '');
+    const email = String(data.get('email') ?? '');
+    const message = String(data.get('message') ?? '');
+    const subject = encodeURIComponent(`Website contact from ${name}`);
+    const body = encodeURIComponent(`${message}\n\nReply to: ${email}`);
+    window.location.href = `mailto:bingham.stuart@gmail.com?subject=${subject}&body=${body}`;
+  });
+
+  // "$ chat" fast path: opens the chat widget when present; falls back to email
+  const chatBtn = document.getElementById('chat-fast-path');
+  const chatNote = document.getElementById('chat-fast-path-note');
+  if (!document.getElementById('chat-launcher') && chatNote) {
+    chatNote.textContent = 'chat widget coming soon. click emails me instead.';
+  }
+  chatBtn?.addEventListener('click', () => {
+    const launcher = document.getElementById('chat-launcher');
+    if (launcher) {
+      launcher.click();
+    } else {
+      window.location.href = 'mailto:bingham.stuart@gmail.com';
+    }
+  });
+</script>

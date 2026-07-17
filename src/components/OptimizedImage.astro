@@ -1,0 +1,47 @@
+---
+/**
+ * OptimizedImage Component
+ *
+ * Wrapper around Astro's Picture component with best practices:
+ * - AVIF and WebP formats with fallback
+ * - Responsive sizes
+ * - Lazy loading by default (eager for above-fold)
+ * - Proper width/height to prevent CLS
+ *
+ * Usage:
+ * <OptimizedImage
+ *   src={import('../assets/hero.jpg')}
+ *   alt="Hero image description"
+ *   priority={true}  // for above-the-fold images
+ * />
+ */
+
+import { Picture } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  priority?: boolean;
+  class?: string;
+  sizes?: string;
+}
+
+const {
+  src,
+  alt,
+  priority = false,
+  class: className = '',
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+} = Astro.props;
+---
+
+<Picture
+  src={src}
+  formats={['avif', 'webp']}
+  alt={alt}
+  loading={priority ? 'eager' : 'lazy'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  decoding={priority ? 'sync' : 'async'}
+  sizes={sizes}
+  class={className}
+/>
