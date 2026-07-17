@@ -1,7 +1,0 @@
-/* /* #projects{
-    min-height: 500px;
-} */
-
-div.d-flex.justify-content-center.align-items-center.col-md-4 > img {
-    max-height: 220px;
-}
