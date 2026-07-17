@@ -1,0 +1,221 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const stats = [
+  { value: '15+ yrs', label: 'Experience' },
+  { value: '14', label: 'Client companies' },
+  { value: '22', label: 'Automation tools' },
+  { value: 'Chandler, AZ', label: 'Location' },
+];
+
+// Skills list per intake/updated-bio.md (supersedes the INTAKE.md list)
+const skillGroups = [
+  {
+    label: '> LANGUAGES',
+    skills: ['javascript', 'typescript', 'php', 'python', 'sql', 'vbscript', 'xml'],
+  },
+  {
+    label: '> FRAMEWORKS_AND_PLATFORMS',
+    skills: [
+      'react',
+      'nestjs',
+      'postgresql',
+      'mysql',
+      'dynamodb',
+      'aws: lambda, ec2, s3, iam, cloudformation, lightsail, codecommit',
+    ],
+  },
+  {
+    label: '> TOOLS_AND_SYSTEMS',
+    skills: [
+      'uipath',
+      'git',
+      'rest apis',
+      'auth0',
+      'wordpress',
+      'microsoft iis',
+      'sharepoint development',
+      'microsoft dynamics admin & dev',
+    ],
+  },
+  {
+    label: '> SPECIALTIES',
+    skills: [
+      'workflow automation',
+      'rpa',
+      'full-stack development',
+      'api design',
+      'cloud infrastructure',
+      'devops',
+      'ai integrations',
+      'microservice architecture',
+    ],
+  },
+];
+
+const certifications = [
+  {
+    year: '2019',
+    title: 'UiPath Developer Advanced Certification',
+    image: { src: '/images/UiPath_2019.png', width: 530, height: 188, alt: 'UiPath Advanced Developer certification badge' },
+  },
+  {
+    year: '2016',
+    title: 'VMware Airwatch Expert Accreditation: Enterprise Mobility',
+    image: { src: '/images/airwatch.png', width: 1000, height: 562, alt: 'VMware Airwatch Enterprise Mobility accreditation badge' },
+  },
+  {
+    year: '2014',
+    title: 'MCP, Microsoft Technology Associate: Windows Operating System',
+    image: { src: '/images/mta.png', width: 200, height: 145, alt: 'Microsoft Technology Associate certification badge' },
+  },
+];
+---
+
+<BaseLayout
+  title="About | Stuart Bingham, Software Engineer in Chandler AZ"
+  description="Senior software engineer and automation specialist in Chandler, AZ. 15+ years across RPA, web development, cloud, and IT for hundreds of US companies."
+>
+  <!-- ============ PAGE HEADER + PROFILE BAND ============ -->
+  <section class="px-4 py-11 sm:px-5 md:py-14 lg:py-20" aria-labelledby="about-heading">
+    <div class="mx-auto max-w-6xl">
+      <div class="text-center">
+        <p class="kicker">Profile</p>
+        <h1 id="about-heading" class="mt-2">About me</h1>
+        <p class="lead mx-auto mt-4">
+          Senior software engineer and automation specialist. Here&rsquo;s the longer version.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-6 lg:grid-cols-[2fr_3fr]">
+        <!-- Left: profile card -->
+        <div class="party-card rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card)">
+          <img
+            src="/images/StuartBingham-800.jpg"
+            alt="Stuart Bingham"
+            width="800"
+            height="829"
+            loading="lazy"
+            class="w-full rounded-lg"
+          />
+
+          <div class="mt-5 grid grid-cols-2 gap-3">
+            {stats.map((stat) => (
+              <div class="stat-tile rounded-xl border border-border bg-inset p-3">
+                <p class="text-lg font-bold text-accent-hover">{stat.value}</p>
+                <p class="mt-0.5 text-kicker font-medium uppercase tracking-(--tracking-kicker) text-text-muted">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <p class="mono-label mt-5 text-text-muted">
+            <span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> STATUS: open_to_opportunities &middot; relocation &amp; remote ok
+          </p>
+
+          <a
+            href="/contact/"
+            class="btn-primary mt-4 inline-flex w-full items-center justify-center rounded-lg bg-accent-600 px-6 py-3 text-sm font-bold uppercase tracking-(--tracking-kicker) text-white transition hover:bg-accent-700 hover:shadow-(--shadow-glow-sm) focus-visible:shadow-(--shadow-glow-sm)"
+          >
+            Get in touch
+          </a>
+        </div>
+
+        <!-- Right: bio -->
+        <div class="party-card rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card) sm:p-8">
+          <p class="mono-label text-text-muted">$ cat about.md</p>
+          <h2 class="mt-3 text-h3">Hello!</h2>
+          <div class="mt-4 space-y-4 text-text-muted">
+            <p>
+              At heart, I&rsquo;m a technologist with a knack for analyzing workflows and designing
+              automation to make things simpler. On paper: a senior software engineer and automation
+              specialist with 15+ years of experience building scalable systems, modernizing
+              infrastructure, and delivering automation solutions across a wide range of industries. I
+              specialize in full-stack development, cloud architecture, workflow automation, and
+              AI-driven operational tooling.
+            </p>
+            <p>
+              Throughout my career, I&rsquo;ve partnered with hundreds of companies across the US to
+              streamline business processes, improve technical operations, and deliver scalable software
+              solutions. My experience spans leading engineering initiatives, managing technical services
+              and SLA delivery, architecting automation workflows, and working directly with stakeholders
+              to solve complex operational challenges.
+            </p>
+            <p>
+              Recently, my work has focused on modern web application development, API architecture,
+              cloud infrastructure, DevOps modernization, and AI-powered automation systems.
+            </p>
+            <p>
+              You can read more about my experience on my
+              <a href="/resume/" class="font-bold text-accent-text hover:underline">resume</a> or in the
+              <a href="/work/" class="font-bold text-accent-text hover:underline">projects section</a>.
+            </p>
+          </div>
+
+          <ul class="mt-6 space-y-2 text-sm text-text-muted">
+            <li><span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> Currently: Software Developer @ Charity Golf Today</li>
+            <li><span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> Based in Chandler, AZ &middot; open to relocation &amp; remote work</li>
+            <li><span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> Passion: automating the boring stuff</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="px-4 py-11 sm:px-5 md:py-14 lg:py-20" aria-labelledby="skills-heading">
+    <div class="mx-auto max-w-6xl">
+      <p class="kicker">Capabilities</p>
+      <h2 id="skills-heading" class="mt-2">Skills &amp; technologies</h2>
+      <p class="lead mt-4">
+        The working toolkit, straight from the resume: languages, frameworks, tools, and the practices
+        that keep projects shippable.
+      </p>
+
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        {skillGroups.map((group) => (
+          <div class="party-card rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card) transition duration-200 hover:-translate-y-0.5 hover:border-(--tint-accent-border-strong) hover:shadow-(--shadow-glow)">
+            <p class="mono-label font-bold text-text-muted">{group.label}</p>
+            <ul class="mt-4 flex flex-wrap gap-x-3 gap-y-2">
+              {group.skills.map((skill) => (
+                <li class="text-sm font-medium text-accent-text">
+                  <span aria-hidden="true">[ </span>{skill}<span aria-hidden="true"> ]</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CERTIFICATIONS ============ -->
+  <section class="px-4 py-11 sm:px-5 md:py-14 lg:py-20" aria-labelledby="certs-heading">
+    <div class="mx-auto max-w-6xl">
+      <p class="kicker">Credentials</p>
+      <h2 id="certs-heading" class="mt-2">Certifications</h2>
+      <p class="lead mt-4">Formal credentials collected along the way.</p>
+
+      <ol class="relative mt-10 space-y-8 border-l-2 border-border pl-8">
+        {certifications.map((cert) => (
+          <li class="relative">
+            <span class="absolute -left-[2.4rem] top-1.5 h-3.5 w-3.5 rounded-full border-2 border-bg bg-accent" aria-hidden="true"></span>
+            <div class="party-card max-w-2xl rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card) transition duration-200 hover:-translate-y-0.5 hover:border-(--tint-accent-border-strong) hover:shadow-(--shadow-glow)">
+              <p class="mono-label text-text-muted"><span aria-hidden="true">[ </span>{cert.year}<span aria-hidden="true"> ]</span></p>
+              <h3 class="mt-2">{cert.title}</h3>
+              <div class="mt-4 flex h-20 items-center">
+                <img
+                  src={cert.image.src}
+                  alt={cert.image.alt}
+                  width={cert.image.width}
+                  height={cert.image.height}
+                  loading="lazy"
+                  class="h-full w-auto max-w-full object-contain"
+                />
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</BaseLayout>

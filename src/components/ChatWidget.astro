@@ -1,0 +1,314 @@
+---
+// component-builder: ChatWidget
+// Purpose: "Chat with me" terminal window. Live-chat-with-Stuart flow with an
+// AI-persona fallback when he's away. Backend intentionally stubbed:
+// DEMO_MODE in the script fakes all four endpoints so the full flow is
+// clickable for design review. Integration guide: docs/chat-widget.md
+---
+
+<div class="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+  <!-- Chat window -->
+  <section
+    id="chat-window"
+    role="dialog"
+    aria-modal="false"
+    aria-label="Chat with Stuart"
+    class="hidden w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-lg shadow-(--shadow-card-hover)"
+  >
+    <!-- Ubuntu terminal chrome (matches TerminalCard: controls on the RIGHT) -->
+    <div class="relative flex h-9 items-center justify-center bg-terminal-chrome px-3">
+      <p class="font-mono text-xs text-terminal-muted">guest@stuartbingham: ~/chat</p>
+      <div class="absolute right-3 flex items-center gap-1.5">
+        <span class="h-3.5 w-3.5 rounded-full bg-white/20" aria-hidden="true"></span>
+        <span class="h-3.5 w-3.5 rounded-full bg-white/20" aria-hidden="true"></span>
+        <button
+          type="button"
+          id="chat-close"
+          class="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent text-[9px] font-bold leading-none text-white"
+          aria-label="Close chat"
+        >&times;</button>
+      </div>
+    </div>
+
+    <div class="flex max-h-[70vh] flex-col bg-terminal">
+      <!-- Message log -->
+      <div
+        id="chat-log"
+        class="min-h-40 flex-1 space-y-3 overflow-y-auto p-4 font-mono text-sm text-terminal-text"
+        aria-live="polite"
+      >
+        <p>
+          <span class="text-terminal-green">stuart@stuartbingham</span><span class="text-terminal-muted">:~$</span>
+          Hi! Leave me a message and my phone gets a text. If I'm at a keyboard, we can chat right here.
+        </p>
+      </div>
+
+      <!-- Composer -->
+      <form id="chat-form" class="space-y-2 border-t border-(--tint-terminal-border) p-3">
+        <input
+          type="text"
+          id="chat-name"
+          name="name"
+          required
+          maxlength="80"
+          placeholder="your name"
+          autocomplete="name"
+          class="w-full rounded-md border border-(--tint-terminal-border) bg-(--tint-terminal-well) px-3 py-2 font-mono text-sm text-terminal-text placeholder:text-terminal-muted"
+        />
+        <div class="flex items-end gap-2">
+          <label for="chat-input" class="sr-only">Message</label>
+          <textarea
+            id="chat-input"
+            name="message"
+            required
+            maxlength="1000"
+            rows="2"
+            placeholder="type a message..."
+            class="w-full flex-1 resize-none rounded-md border border-(--tint-terminal-border) bg-(--tint-terminal-well) px-3 py-2 font-mono text-sm text-terminal-text placeholder:text-terminal-muted"
+          ></textarea>
+          <button
+            type="submit"
+            id="chat-send"
+            class="rounded-lg bg-accent-600 px-4 py-2 font-mono text-sm font-bold text-white transition-colors hover:bg-accent-700"
+          >send</button>
+        </div>
+        <p id="chat-hint" class="font-mono text-xs text-terminal-muted">sends a text to Stuart's phone</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Floating launcher -->
+  <button
+    type="button"
+    id="chat-launcher"
+    aria-expanded="false"
+    aria-controls="chat-window"
+    class="flex items-center gap-2 rounded-lg bg-accent-600 px-4 py-3 font-mono text-sm font-bold text-white shadow-(--shadow-card) transition-colors hover:bg-accent-700"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>
+    </svg>
+    chat
+  </button>
+</div>
+
+<script>
+  // ============================================================
+  // Config — see docs/chat-widget.md for the backend contract.
+  // Flip DEMO_MODE to false once the Worker routes exist.
+  // ============================================================
+  const DEMO_MODE = true;
+  const ENDPOINTS = {
+    session: '/api/chat/session',
+    send: '/api/chat/send',
+    poll: '/api/chat/poll',
+    ai: '/api/chat/ai',
+  };
+  const LIVE_WAIT_SECONDS = 90;
+  const POLL_INTERVAL_MS = 3000;
+
+  const launcher = document.getElementById('chat-launcher') as HTMLButtonElement;
+  const windowEl = document.getElementById('chat-window') as HTMLElement;
+  const closeBtn = document.getElementById('chat-close') as HTMLButtonElement;
+  const log = document.getElementById('chat-log') as HTMLElement;
+  const form = document.getElementById('chat-form') as HTMLFormElement;
+  const nameInput = document.getElementById('chat-name') as HTMLInputElement;
+  const msgInput = document.getElementById('chat-input') as HTMLTextAreaElement;
+  const hint = document.getElementById('chat-hint') as HTMLElement;
+
+  type Mode = 'compose' | 'waiting' | 'live' | 'ai-offer' | 'ai';
+  let mode: Mode = 'compose';
+  let sessionId: string | null = null;
+  let aiHistory: { role: string; content: string }[] = [];
+
+  const PROMPTS: Record<string, { name: string; cls: string }> = {
+    visitor: { name: 'you@guest', cls: 'text-terminal-orange' },
+    stuart: { name: 'stuart@stuartbingham', cls: 'text-terminal-green' },
+    ai: { name: 'ai@stuartbingham', cls: 'text-terminal-muted' },
+    system: { name: '', cls: '' },
+  };
+
+  function addLine(from: keyof typeof PROMPTS, text: string) {
+    const p = document.createElement('p');
+    if (from === 'system') {
+      p.className = 'text-terminal-muted';
+      p.textContent = text;
+    } else {
+      const prompt = PROMPTS[from];
+      const promptSpan = document.createElement('span');
+      promptSpan.className = prompt.cls;
+      promptSpan.textContent = prompt.name;
+      const sep = document.createElement('span');
+      sep.className = 'text-terminal-muted';
+      sep.textContent = ':~$ ';
+      p.append(promptSpan, sep, document.createTextNode(text));
+    }
+    log.appendChild(p);
+    log.scrollTop = log.scrollHeight;
+    return p;
+  }
+
+  function addAction(label: string, onClick: () => void) {
+    const wrap = document.createElement('p');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className =
+      'rounded-lg border border-(--tint-terminal-border) px-3 py-1.5 font-mono text-sm text-terminal-orange transition-colors hover:bg-(--tint-terminal-well)';
+    btn.textContent = label;
+    btn.addEventListener('click', () => {
+      wrap.remove();
+      onClick();
+    });
+    wrap.appendChild(btn);
+    log.appendChild(wrap);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function openChat() {
+    windowEl.classList.remove('hidden');
+    launcher.setAttribute('aria-expanded', 'true');
+    (mode === 'compose' ? nameInput : msgInput).focus();
+  }
+  function closeChat() {
+    windowEl.classList.add('hidden');
+    launcher.setAttribute('aria-expanded', 'false');
+    launcher.focus();
+  }
+  launcher.addEventListener('click', () => {
+    windowEl.classList.contains('hidden') ? openChat() : closeChat();
+  });
+  closeBtn.addEventListener('click', closeChat);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !windowEl.classList.contains('hidden')) closeChat();
+  });
+
+  // ============================================================
+  // Backend adapters — demo fakes vs real fetch. Same signatures.
+  // ============================================================
+  const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  async function apiCreateSession(name: string, message: string) {
+    if (DEMO_MODE) {
+      await delay(900);
+      return { sessionId: 'demo-' + Math.random().toString(36).slice(2), stuartAvailable: false };
+    }
+    const res = await fetch(ENDPOINTS.session, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, message }),
+    });
+    return res.json();
+  }
+
+  async function apiPollUntilLiveOrAway(): Promise<'live' | 'away'> {
+    if (DEMO_MODE) {
+      // Demo: Stuart is "away" after a short wait so the fallback is reviewable
+      await delay(6000);
+      return 'away';
+    }
+    const deadline = Date.now() + LIVE_WAIT_SECONDS * 1000;
+    while (Date.now() < deadline) {
+      const res = await fetch(`${ENDPOINTS.poll}?sessionId=${sessionId}`);
+      const data = await res.json();
+      for (const m of data.newMessages ?? []) addLine('stuart', m.text);
+      if (data.status === 'live') return 'live';
+      if (data.status === 'away') return 'away';
+      await delay(POLL_INTERVAL_MS);
+    }
+    return 'away';
+  }
+
+  async function apiSendLive(message: string) {
+    if (DEMO_MODE) return;
+    await fetch(ENDPOINTS.send, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId, message }),
+    });
+  }
+
+  async function apiAskAI(message: string): Promise<string> {
+    aiHistory.push({ role: 'user', content: message });
+    if (DEMO_MODE) {
+      await delay(1200);
+      const canned = [
+        "Stuart has spent 15+ years across full-stack development, automation, and IT. Ask me about his projects, stack, or experience.",
+        "One highlight: he built a Claude-powered lead analysis tool that lifted qualified leads by about 40%. The write-up is on the Work page.",
+        "His core stack is JavaScript/TypeScript, PHP, and Python, with React, AWS, and a deep RPA background (UiPath).",
+        "For anything specific, the Contact page reaches him directly. He usually replies within a day.",
+      ];
+      const reply = canned[Math.min(aiHistory.filter((m) => m.role === 'user').length - 1, canned.length - 1)];
+      aiHistory.push({ role: 'assistant', content: reply });
+      return reply;
+    }
+    const res = await fetch(ENDPOINTS.ai, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId, messages: aiHistory }),
+    });
+    const data = await res.json();
+    aiHistory.push({ role: 'assistant', content: data.reply });
+    return data.reply;
+  }
+
+  // ============================================================
+  // Flow
+  // ============================================================
+  function enterAIMode() {
+    mode = 'ai';
+    hint.textContent = 'AI responses are generated. For the real Stuart, use the Contact page.';
+    addLine('ai', "[AI] Hi, I'm an assistant that knows Stuart's work. What would you like to know?");
+    msgInput.focus();
+  }
+
+  function offerAI() {
+    mode = 'ai-offer';
+    addLine('system', 'stuart is away_from_keyboard. your message reached his phone.');
+    addLine('system', 'in the meantime, want to ask an AI about his experience?');
+    addAction('[ start AI chat ]', enterAIMode);
+    addAction('[ no thanks, he can text back ]', () => {
+      addLine('system', "done. he'll follow up when he's back at a keyboard.");
+      form.querySelectorAll('input, textarea, button').forEach((el) => ((el as HTMLInputElement).disabled = true));
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const message = msgInput.value.trim();
+    if (!message) return;
+
+    if (mode === 'compose') {
+      const name = nameInput.value.trim();
+      if (!name) return;
+      addLine('visitor', message);
+      msgInput.value = '';
+      nameInput.classList.add('hidden');
+      const status = addLine('system', 'sending... [texting stuart]');
+      const session = await apiCreateSession(name, message);
+      sessionId = session.sessionId;
+      status.textContent = 'delivered. waiting to see if stuart is around...';
+      mode = 'waiting';
+      hint.textContent = "you can keep typing, he'll get it all";
+      const outcome = await apiPollUntilLiveOrAway();
+      if (outcome === 'live') {
+        mode = 'live';
+        hint.textContent = 'you are chatting live with Stuart';
+      } else {
+        offerAI();
+      }
+      return;
+    }
+
+    addLine('visitor', message);
+    msgInput.value = '';
+
+    if (mode === 'ai') {
+      const thinking = addLine('system', '...');
+      const reply = await apiAskAI(message);
+      thinking.remove();
+      addLine('ai', `[AI] ${reply}`);
+    } else {
+      await apiSendLive(message);
+    }
+  });
+</script>

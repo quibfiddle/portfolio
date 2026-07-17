@@ -11,8 +11,9 @@ test('all internal links resolve', async ({ page }) => {
   const uniqueHrefs = [...new Set(hrefs)].filter(Boolean);
 
   for (const href of uniqueHrefs) {
-    const response = await page.goto(href!);
-    expect(response?.status()).toBeLessThan(400);
+    // request.get avoids "Download is starting" on file links (e.g. the resume PDF)
+    const response = await page.request.get(href!);
+    expect(response.status(), `${href} should resolve`).toBeLessThan(400);
   }
 });
 

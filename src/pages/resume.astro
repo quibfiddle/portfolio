@@ -1,0 +1,198 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const experience = [
+  {
+    dates: '[ 10/2024 – now ]',
+    title: 'Software Developer',
+    company: 'Charity Golf Today',
+    location: 'Chandler, AZ',
+    bullets: [
+      'Development and platform support for 14 client companies, including Dixon Golf and their brands',
+      'Claude-powered lead analysis (+40% qualified leads), PHP 7.x to 8.3 and MySQL/MariaDB modernization (up to 50% faster loads, 30x query gains), Git-based deployment workflow across 13 sites',
+    ],
+  },
+  {
+    dates: '[ 12/2019 – 09/2024 ]',
+    title: 'Lead Developer, Automation & API Development',
+    company: 'Proveo Automation',
+    location: 'Remote',
+    bullets: [
+      'Led RPA services supporting hundreds of companies across the US',
+      'Built custom automation and analysis tools with UiPath and TypeScript, plus custom APIs',
+    ],
+  },
+  {
+    dates: '[ 05/2017 – 10/2019 ]',
+    title: 'Automation Developer & Web Application Support',
+    company: 'TeamLogicIT',
+    location: 'Phoenix, AZ',
+    bullets: [
+      'Automated deployments and managed tools for 30,000+ devices using VBScript and KML scripting',
+      'Managed web applications for healthcare and power generation clients at 99% uptime',
+    ],
+  },
+  {
+    dates: '[ 11/2014 – 03/2017 ]',
+    title: 'Service Design and Transition Engineer',
+    company: 'Allcovered, Konica Minolta Business Solutions',
+    location: 'Phoenix, AZ',
+    bullets: [
+      'Designed and scripted the AVG-to-Bitdefender antivirus migration across 124,000+ endpoints',
+      'Wrote platform documentation and trained 800+ engineers',
+    ],
+  },
+  {
+    dates: '[ 03/2014 – 10/2014 ]',
+    title: 'Onsite and Remote Support Engineer',
+    company: 'McDermit Consulting',
+    location: '',
+    bullets: [],
+  },
+  {
+    dates: '[ 01/2013 – 11/2013 ]',
+    title: 'Remote Support Analyst & NOC Analyst',
+    company: 'Mytek Network Solutions',
+    location: '',
+    bullets: [],
+  },
+  {
+    dates: '[ 01/2010 – 05/2010 ]',
+    title: 'IT Department Intern',
+    company: 'Northland Pioneer College',
+    location: '',
+    bullets: [],
+  },
+];
+
+// Skills per intake/updated-bio.md (supersedes the INTAKE.md list)
+const skillGroups = [
+  { label: 'Languages', skills: 'JavaScript, TypeScript, PHP, Python, SQL, VBScript, XML' },
+  {
+    label: 'Frameworks & Platforms',
+    skills:
+      'React, NestJS, PostgreSQL, MySQL, DynamoDB, AWS (Lambda, EC2, S3, IAM, CloudFormation, Lightsail, CodeCommit)',
+  },
+  {
+    label: 'Tools & Systems',
+    skills:
+      'UiPath, Git, REST APIs, Auth0, WordPress, Microsoft IIS, SharePoint Development, Microsoft Dynamics Administration & Development',
+  },
+  {
+    label: 'Specialties',
+    skills:
+      'Workflow Automation, RPA, Full-Stack Development, API Design, Cloud Infrastructure, DevOps, AI Integrations, Microservice Architecture',
+  },
+];
+
+const certifications = [
+  '[ 2019 ] UiPath Developer Advanced Certification',
+  '[ 2016 ] VMware Airwatch Expert Accreditation: Enterprise Mobility',
+  '[ 2014 ] MCP, Microsoft Technology Associate: Windows Operating System',
+];
+---
+
+<BaseLayout
+  title="Resume | Stuart Bingham, Full-Stack Developer in Chandler AZ"
+  description="Resume of Stuart Bingham, senior software engineer with 15+ years building web apps, APIs, and automation tooling. Read it here or download the PDF."
+>
+  <section class="px-4 py-11 sm:px-5 md:py-14 lg:py-20" aria-labelledby="resume-heading">
+    <div class="mx-auto max-w-4xl">
+      <div class="text-center">
+        <p class="kicker">Resume</p>
+        <h1 id="resume-heading" class="mt-2">The paper trail</h1>
+        <p class="lead mx-auto mt-4">
+          Senior software engineer and automation specialist: 15+ years of building web applications,
+          RESTful APIs, and automation tooling. Read it here or take the PDF with you.
+        </p>
+
+        <div class="mt-8">
+          <a
+            href="/Stuart-Bingham-Resume.pdf"
+            download
+            class="btn-primary inline-flex items-center rounded-lg bg-accent-600 px-6 py-3 text-sm font-bold uppercase tracking-(--tracking-kicker) text-white transition hover:bg-accent-700 hover:shadow-(--shadow-glow-sm) focus-visible:shadow-(--shadow-glow-sm)"
+          >
+            Download PDF
+          </a>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="party-card mt-12 rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card) sm:p-8">
+        <p class="mono-label font-bold text-text-muted">&gt; SUMMARY</p>
+        <p class="mt-4 text-text-muted">
+          Senior software engineer and automation specialist with 15+ years of experience building
+          scalable systems, modernizing infrastructure, and delivering automation solutions across a
+          wide range of industries. Proven modernizer: legacy PHP migrations with up to 50% faster page
+          loads and 30x query performance improvements. Builder of real tools: 22 custom automation and
+          analysis tools (UiPath, TypeScript), 4 custom APIs, and AI-based lead generation systems.
+          Operates at scale: 14 client companies currently, and 30,000 to 124,000+ managed devices in
+          past roles. Based in Chandler, AZ, open to relocation and remote work.
+        </p>
+        <p class="mono-label mt-4 text-text-muted">
+          <span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> Chandler, AZ &middot; bingham.stuart@gmail.com &middot; (480) 498-8273
+        </p>
+      </div>
+
+      <!-- Experience -->
+      <div class="party-card mt-6 rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card) sm:p-8">
+        <p class="mono-label font-bold text-text-muted">&gt; EXPERIENCE</p>
+        <ol class="mt-6 space-y-6">
+          {experience.map((role) => (
+            <li class="border-b border-border pb-6 last:border-b-0 last:pb-0">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h2 class="text-h3">{role.title}</h2>
+                <p class="mono-label text-text-muted">{role.dates}</p>
+              </div>
+              <p class="mt-1 text-sm text-text-muted">
+                {role.company}{role.location && <span> &middot; {role.location}</span>}
+              </p>
+              {role.bullets.length > 0 && (
+                <ul class="mt-3 space-y-1.5">
+                  {role.bullets.map((bullet) => (
+                    <li class="text-sm text-text-muted">
+                      <span class="font-mono text-accent-text" aria-hidden="true">&rarr;</span> {bullet}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <!-- Skills -->
+      <div class="party-card mt-6 rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card) sm:p-8">
+        <p class="mono-label font-bold text-text-muted">&gt; TECHNICAL_SKILLS</p>
+        <dl class="mt-4 space-y-3">
+          {skillGroups.map((group) => (
+            <div class="flex flex-col gap-x-4 sm:flex-row">
+              <dt class="w-56 shrink-0 text-sm font-bold text-text">{group.label}</dt>
+              <dd class="text-sm text-text-muted">{group.skills}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <!-- Certifications -->
+      <div class="party-card mt-6 rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card) sm:p-8">
+        <p class="mono-label font-bold text-text-muted">&gt; CERTIFICATIONS</p>
+        <ul class="mt-4 space-y-2">
+          {certifications.map((cert) => (
+            <li class="text-sm text-text-muted">{cert}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="mt-10 text-center">
+        <a
+          href="/Stuart-Bingham-Resume.pdf"
+          download
+          class="inline-flex items-center rounded-lg border border-border bg-surface px-6 py-3 text-sm font-bold uppercase tracking-(--tracking-kicker) text-text transition hover:border-(--tint-accent-border-strong) hover:text-accent-text hover:shadow-(--shadow-glow-sm) focus-visible:shadow-(--shadow-glow-sm)"
+        >
+          Download the PDF version
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,77 @@
+---
+// component-builder: Footer
+// Purpose: Centered site footer with nav links, contact links, and copyright
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about/' },
+  { label: 'Work', href: '/work/' },
+  { label: 'Resume', href: '/resume/' },
+  { label: 'Contact', href: '/contact/' },
+];
+---
+
+<footer class="border-t border-border">
+  <div class="mx-auto max-w-6xl px-4 py-10 text-center sm:px-5">
+    <nav aria-label="Footer navigation">
+      <ul class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        {navItems.map((item) => (
+          <li>
+            <a href={item.href} class="text-sm font-medium text-text-muted transition-colors hover:text-accent-text">
+              {item.label}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a
+            href="https://www.linkedin.com/in/stuart-bingham-6267356a/"
+            target="_blank"
+            rel="noopener"
+            class="text-sm font-medium text-text-muted transition-colors hover:text-accent-text"
+          >
+            LinkedIn<span class="sr-only"> (opens in new tab)</span>
+          </a>
+        </li>
+        <li>
+          <a href="mailto:bingham.stuart@gmail.com" class="text-sm font-medium text-text-muted transition-colors hover:text-accent-text">
+            Email
+          </a>
+        </li>
+        <li>
+          <a href="/privacy/" class="text-sm font-medium text-text-muted transition-colors hover:text-accent-text">
+            Privacy
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p class="mt-6 text-sm text-text-muted">
+      &copy; 2026 Stuart Bingham &middot; Full-Stack Developer &amp; IT Professional &middot; Chandler, AZ
+    </p>
+
+    <p class="mono-label mt-3 text-text-muted">
+      stuart@stuartbingham:~$ echo "Thanks for scrolling"
+    </p>
+
+    <!-- Party-mode-only 1996 widgets -->
+    <p class="mono-label mt-4 hidden space-x-2 party:block" aria-hidden="true">
+      <span class="party-led">VISITORS: 1,337,437</span>
+      <span class="party-led">STUART TIME: <span id="party-clock">--:--:--</span></span>
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Party-mode clock (element is display:none outside the party theme)
+  const clock = document.getElementById('party-clock');
+  function tickClock() {
+    if (clock) {
+      clock.textContent = new Date().toLocaleTimeString('en-US', {
+        timeZone: 'America/Phoenix',
+        hour12: true,
+      });
+    }
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+</script>

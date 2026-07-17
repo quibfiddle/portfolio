@@ -1,0 +1,337 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Roles with resume-sourced bullets get accordions; the last three are one-liners.
+const roles = [
+  {
+    dates: '[ 10/2024 – now ]',
+    title: 'Software Developer',
+    company: 'Charity Golf Today',
+    location: 'Chandler, AZ',
+    logo: null,
+    current: true,
+    bullets: [
+      'Develop and support platforms for 14 client companies, including Dixon Golf and their brands',
+      'Built a Claude-powered lead analysis tool that increased qualified leads by about 40%',
+      'Modernized legacy infrastructure: PHP 7.x to 8.3 and a patched MySQL/MariaDB, cutting page loads by up to 50% with query improvements up to 30x',
+      'Moved 13 legacy sites from FTP editing into Git repositories with automatic webhook deployments, and trained the team on the new workflow',
+    ],
+  },
+  {
+    dates: '[ 12/2019 – 09/2024 ]',
+    title: 'Lead Developer, Automation & API Development',
+    company: 'Proveo Automation',
+    location: 'Remote',
+    logo: { src: '/images/Proveo.png', width: 200, height: 200 },
+    current: false,
+    bullets: [
+      'Led robotic process automation services, supporting hundreds of companies across the US',
+      'Built custom automation and analysis tooling with UiPath and TypeScript, plus custom APIs',
+      'Project work from this era includes the Sounds True course migration, DHS document cataloging, and the Property Analyzer API (see case studies below)',
+    ],
+  },
+  {
+    dates: '[ 05/2017 – 10/2019 ]',
+    title: 'Automation Developer & Web Application Support',
+    company: 'TeamLogicIT',
+    location: 'Phoenix, AZ',
+    logo: { src: '/images/tllogo-300.png', width: 300, height: 196 },
+    current: false,
+    bullets: [
+      'Automated deployments and managed tools for over 30,000 devices using VBScript and KML scripting',
+      'Managed web applications for clients in healthcare and power generation sectors, achieving 99% uptime',
+      'Provided advanced technical support for web applications and automation tools',
+    ],
+  },
+  {
+    dates: '[ 11/2014 – 03/2017 ]',
+    title: 'Service Design and Transition Engineer',
+    company: 'Allcovered, Konica Minolta Business Solutions',
+    location: 'Phoenix, AZ',
+    logo: { src: '/images/allcoveredlogo.png', width: 265, height: 265 },
+    current: false,
+    bullets: [
+      'SME for managed antivirus (Kaseya AVG and Endpoint Security) as a national MSP',
+      'Vetted, designed, and scripted the AVG-to-Bitdefender migration deployed across more than 124,000 endpoints',
+      'Wrote platform documentation and led training sessions with over 800 engineers',
+    ],
+  },
+];
+
+const compactRoles = [
+  {
+    dates: '[ 03/2014 – 10/2014 ]',
+    title: 'Onsite and Remote Support Engineer',
+    company: 'McDermit Consulting',
+    logo: { src: '/images/mcdermitt.png', width: 500, height: 500 },
+  },
+  {
+    dates: '[ 01/2013 – 11/2013 ]',
+    title: 'Remote Support Analyst & NOC Analyst',
+    company: 'Mytek Network Solutions',
+    logo: { src: '/images/myteklogo.png', width: 548, height: 266 },
+  },
+  {
+    dates: '[ 01/2010 – 05/2010 ]',
+    title: 'IT Department Intern',
+    company: 'Northland Pioneer College',
+    logo: null,
+  },
+];
+
+const filters = [
+  { id: 'all', label: 'all' },
+  { id: 'ai', label: 'ai' },
+  { id: 'rpa', label: 'rpa' },
+  { id: 'web', label: 'web' },
+  { id: 'api', label: 'api' },
+  { id: 'it', label: 'it' },
+];
+
+const projects = [
+  {
+    title: 'AI-Powered Lead Analysis',
+    cats: ['ai'],
+    tags: ['ai', 'automation', 'claude'],
+    image: null,
+    description:
+      'The previous lead-scraping tool for Dixon Golf and their brands produced junk leads it couldn’t see through. I built an AI scraping tool with Claude that interacts with JavaScript buttons to reveal hidden information, uses vision to read text out of images, and analyzes each page to throw out bad leads, increasing qualified leads by about 40%.',
+  },
+  {
+    title: 'Legacy Platform Modernization',
+    cats: ['it', 'web'],
+    tags: ['php 8.3', 'mysql/mariadb', 'it'],
+    image: null,
+    description:
+      'An aging server on end-of-life software ran critical infrastructure for Dixon Golf and several sister companies. I migrated the database layer to a patched MySQL/MariaDB and updated or migrated every site from PHP 7.x (some as old as 7.0) to PHP 8.3, cutting average page loads by up to 50% and taking queries that ran 24 to 30 seconds down to sub-second, a 30x improvement.',
+  },
+  {
+    title: 'Git-Based Deployment Workflow',
+    cats: ['web'],
+    tags: ['git', 'devops', 'process'],
+    image: null,
+    description:
+      'Thirteen legacy sites were edited directly on the production server over FTP, with no source control. I moved every site into its own Git repository, created webhooks that automatically deploy to production on push, and trained developers who were new to Git on the day-to-day workflows they needed. The result: 13 sites consolidated into standardized, version-controlled deployments.',
+  },
+  {
+    title: '30,000-Device Deployment Automation',
+    cats: ['it'],
+    tags: ['vbscript', 'automation', 'it'],
+    image: null,
+    description:
+      'At TeamLogicIT I automated deployments and managed tools for over 30,000 devices using VBScript and KML scripting, managed web applications for clients in healthcare and power generation with 99% uptime, and provided advanced technical support for web applications and automation tools.',
+  },
+  {
+    title: 'Sounds True Online Course Migration',
+    cats: ['rpa'],
+    tags: ['rpa', 'uipath', 'etl'],
+    image: { src: '/images/soundstrue.webp', width: 310, height: 70, alt: 'Sounds True logo' },
+    description:
+      'I worked with stakeholders to understand and develop an RPA tool to extract the entire course library from their previous e-learning platform and load it into their current one. With the tool, we performed ETL on over 150 courses, each with 10 to 100 pages and videos. The tool has since been used for similar migrations on other e-learning platforms such as PsychArmor, Functional Movement, and GoLearn.',
+  },
+  {
+    title: 'DHS Acquisition Program Baseline Cataloging',
+    cats: ['rpa'],
+    tags: ['rpa', 'uipath', 'computer vision'],
+    image: { src: '/images/dhs.png', width: 225, height: 225, alt: 'Department of Homeland Security seal' },
+    description:
+      'DHS manages projects through Acquisition Program Baseline (APB) documents that measure program cost, schedule, and performance. The documents were often PDFs that had been printed, written on, scanned, and saved again. Using UiPath, I demonstrated our ability to iterate through a provided set of documents, use computer vision to extract their text contents, and store metadata about each APB, such as name, budget, and expected completion, in a database.',
+  },
+  {
+    title: 'Off Market Deals HQ',
+    cats: ['web'],
+    tags: ['web', 'wordpress', 'rpa integrations'],
+    image: { src: '/images/Market-Deals-HQ-logo.webp', width: 1945, height: 935, alt: 'Off Market Deals HQ logo' },
+    description:
+      'A web app whose backend I developed, used by realtors on the East Coast to buy and sell fix-and-flip properties. The work involved understanding stakeholder requirements, testing several real estate listing platforms in WordPress, customizing the look and feel of the site, building custom RPA integrations with several CRM platforms to continuously populate the listings, and building robust documentation and test suites for continued client management.',
+  },
+  {
+    title: 'FISH.tech',
+    cats: ['web'],
+    tags: ['web', 'backend', 'microservices'],
+    image: { src: '/images/wcp.png', width: 663, height: 340, alt: 'FISH.tech application screenshot' },
+    description:
+      'I worked as a backend developer for FISH, a tool for purchasing and managing fix-and-flip, rental, and property development loans. I oversaw the creation of the datatypes used for storing application information and developed the property analyzer API microservice used by the property analyzer tool in the application.',
+  },
+  {
+    title: 'Property Analyzer API',
+    cats: ['api'],
+    tags: ['api', 'geocoding', 'spec & lead dev'],
+    image: { src: '/images/reminereversegeocodingapi-800.jpg', width: 800, height: 688, alt: 'Property Analyzer reverse geocoding API diagram' },
+    description:
+      'I built the specification and led the development of an API that accepted a residential street address and a radius, or a set of latitudes and longitudes defining a polygon. With those values, it built a grid of points within the provided area and performed reverse geocoding on each point. We could then look up public record information about each address and build a list of houses comparable to the provided residential address.',
+  },
+  {
+    title: 'AVG to Bitdefender Managed Antivirus Migration',
+    cats: ['it'],
+    tags: ['it', 'endpoint security', '124k endpoints'],
+    image: { src: '/images/AVGtoBitdefender-800.jpg', width: 800, height: 558, alt: 'AVG to Bitdefender migration illustration' },
+    description:
+      'At Allcovered I was the SME for deploying and maintaining Kaseya Antivirus (managed AVG) and Kaseya Endpoint Security (managed Malwarebytes). I vetted several cloud-managed antivirus solutions against our criteria as a national MSP, designed and wrote the scripts to uninstall AVG or competing antivirus, install Bitdefender, and register each endpoint in our management platform. I wrote documentation, led training sessions with over 800 engineers, and deployed the cut-over script on more than 124,000 endpoints.',
+  },
+];
+---
+
+<BaseLayout
+  title="Work & Experience | Stuart Bingham, Automation Specialist"
+  description="Stuart Bingham's career across development, automation, and IT: ten case studies, from Claude-powered lead analysis to a 124K-endpoint security migration."
+>
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="px-4 py-11 sm:px-5 md:py-14 lg:py-20" aria-labelledby="experience-heading">
+    <div class="mx-auto max-w-6xl">
+      <div class="text-center">
+        <p class="kicker">Career</p>
+        <h1 id="experience-heading" class="mt-2">Experience &amp; projects</h1>
+        <p class="lead mx-auto mt-4">
+          Seven roles and ten case studies across development, automation, and IT infrastructure.
+        </p>
+      </div>
+
+      <div class="mx-auto mt-10 max-w-4xl space-y-4">
+        {roles.map((role) => (
+          <details
+            class="party-card group rounded-xl border border-border bg-surface shadow-(--shadow-card) transition duration-200 hover:border-(--tint-accent-border-strong)"
+            open={role.current}
+          >
+            <summary class="flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-2 rounded-xl p-6 marker:content-none [&::-webkit-details-marker]:hidden">
+              {role.logo && (
+                <img
+                  src={role.logo.src}
+                  alt=""
+                  width={role.logo.width}
+                  height={role.logo.height}
+                  loading="lazy"
+                  class="h-10 w-10 shrink-0 rounded-md object-contain"
+                />
+              )}
+              <span class="min-w-0 flex-1">
+                <span class="block text-h3 font-bold text-text">{role.title}</span>
+                <span class="mt-0.5 block text-sm text-text-muted">{role.company} &middot; {role.location}</span>
+              </span>
+              <span class="mono-label text-text-muted">{role.dates}</span>
+              {role.current && (
+                <span class="mono-label font-bold text-success-text">STATUS: ACTIVE</span>
+              )}
+              <span class="mono-label font-bold text-accent-text transition-transform group-open:rotate-90" aria-hidden="true">&gt;</span>
+            </summary>
+            <ul class="space-y-2 px-6 pb-6 pt-0">
+              {role.bullets.map((bullet) => (
+                <li class="text-sm text-text-muted">
+                  <span class="font-mono text-accent-text" aria-hidden="true">&rarr;</span> {bullet}
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))}
+
+        <!-- Earlier roles: compact one-liners -->
+        <div class="party-card rounded-xl border border-border bg-surface p-6 shadow-(--shadow-card)">
+          <p class="mono-label font-bold text-text-muted">&gt; EARLIER_ROLES</p>
+          <ul class="mt-4 space-y-3">
+            {compactRoles.map((role) => (
+              <li class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                {role.logo && (
+                  <img
+                    src={role.logo.src}
+                    alt=""
+                    width={role.logo.width}
+                    height={role.logo.height}
+                    loading="lazy"
+                    class="h-8 w-8 shrink-0 rounded-md object-contain"
+                  />
+                )}
+                <span class="min-w-0 flex-1 text-sm">
+                  <span class="font-bold text-text">{role.title}</span>
+                  <span class="text-text-muted"> &middot; {role.company}</span>
+                </span>
+                <span class="mono-label text-text-muted">{role.dates}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CASE STUDIES ============ -->
+  <section class="px-4 py-11 sm:px-5 md:py-14 lg:py-20" aria-labelledby="portfolio-heading">
+    <div class="mx-auto max-w-6xl">
+      <p class="kicker">Portfolio</p>
+      <h2 id="portfolio-heading" class="mt-2">Case studies</h2>
+      <p class="lead mt-4">
+        Ten projects with real problems and measurable results. Filter by category, or browse the lot.
+      </p>
+
+      <!-- Category filters (all projects visible without JS) -->
+      <div class="mt-8 flex flex-wrap gap-x-4 gap-y-2" role="group" aria-label="Filter case studies by category">
+        {filters.map((filter, i) => (
+          <button
+            type="button"
+            data-filter={filter.id}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            class="filter-btn mono-label font-bold text-text-muted transition-colors hover:text-accent-text aria-pressed:text-accent-text"
+          >
+            <span aria-hidden="true">[ </span>{filter.label}<span aria-hidden="true"> ]</span>
+          </button>
+        ))}
+      </div>
+
+      <div id="project-grid" class="mt-8 grid gap-6 md:grid-cols-2">
+        {projects.map((project) => (
+          <article
+            class="party-card flex flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-(--shadow-card) transition duration-200 hover:-translate-y-0.5 hover:border-(--tint-accent-border-strong) hover:shadow-(--shadow-glow)"
+            data-cats={project.cats.join(' ')}
+          >
+            <div class="flex aspect-[16/9] items-center justify-center border-b border-border bg-inset p-6">
+              {project.image ? (
+                <img
+                  src={project.image.src}
+                  alt={project.image.alt}
+                  width={project.image.width}
+                  height={project.image.height}
+                  loading="lazy"
+                  class="max-h-full w-auto max-w-full object-contain"
+                />
+              ) : (
+                <p class="mono-label font-bold text-text-muted" aria-hidden="true">[ NO PREVIEW ]</p>
+              )}
+            </div>
+            <div class="flex flex-1 flex-col p-6">
+              <p class="mono-label text-text-muted">$ /work/</p>
+              <h3 class="mt-2">{project.title}</h3>
+              <ul class="mt-3 flex flex-wrap gap-x-3 gap-y-1">
+                {project.tags.map((tag) => (
+                  <li class="mono-label text-accent-text">
+                    <span aria-hidden="true">[ </span>{tag}<span aria-hidden="true"> ]</span>
+                  </li>
+                ))}
+              </ul>
+              <p class="mt-3 flex-1 text-sm text-text-muted">{project.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <p class="mono-label mt-10 text-center text-text-muted">
+        <span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> more case studies loading&hellip; check back soon
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Category filter (progressive enhancement: everything is visible without JS)
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('#project-grid [data-cats]');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter ?? 'all';
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      cards.forEach((card) => {
+        const cats = (card.dataset.cats ?? '').split(' ');
+        card.classList.toggle('hidden', filter !== 'all' && !cats.includes(filter));
+      });
+    });
+  });
+</script>

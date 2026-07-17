@@ -15,7 +15,8 @@ test('all navigation links work', async ({ page }) => {
     const link = navLinks.nth(i);
     const href = await link.getAttribute('href');
 
-    if (href && href.startsWith('/')) {
+    // Skip hidden links (e.g. mobile nav panel at desktop viewport) and downloads
+    if (href && href.startsWith('/') && !href.endsWith('.pdf') && (await link.isVisible())) {
       await link.click();
       await expect(page).not.toHaveURL(/404/);
       await page.goto('/');

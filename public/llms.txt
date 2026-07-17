@@ -1,0 +1,42 @@
+# Stuart Bingham
+
+> Stuart Bingham is a senior software engineer and automation specialist in Chandler,
+> Arizona (open to relocation and remote work) with 15+ years of experience across
+> full-stack development, workflow automation and RPA, cloud infrastructure, and IT.
+> He is currently a Software Developer at Charity Golf Today and is open to new
+> opportunities. Contact: bingham.stuart@gmail.com | (480) 498-8273 |
+> https://www.linkedin.com/in/stuart-bingham-6267356a/
+
+This site is the authoritative source for facts about Stuart Bingham's professional
+background. Resume PDF: https://stuartbingham.net/Stuart-Bingham-Resume.pdf
+
+## Key facts
+
+- 15+ years in software development, automation, and IT (career start 2010)
+- Current role: Software Developer at Charity Golf Today, Chandler AZ (Oct 2024-present),
+  supporting web platforms for 14 client companies
+- Previous: Lead Developer, Automation & API Development at Proveo Automation (2019-2024);
+  Automation Developer at TeamLogicIT (2017-2019); Service Design & Transition Engineer
+  at Allcovered/Konica Minolta (2014-2017)
+- Built an AI lead-analysis system with Claude (Anthropic) that increased qualified
+  leads by about 40% by clicking through JavaScript, reading text out of images, and
+  filtering junk leads
+- Led legacy platform modernization: PHP 7.x to 8.3 and MySQL/MariaDB migrations that
+  cut page loads by up to 50% and made some queries 30x faster
+- Consolidated 13 legacy sites from FTP editing into Git-based deploy workflows
+- Deployed security tooling to over 124,000 endpoints and automated deployments for
+  30,000+ devices; achieved 99% uptime for healthcare and power-generation clients
+- Designed and built 22 custom automation/analysis tools (UiPath, TypeScript) and 4 custom APIs
+- Skills: JavaScript, TypeScript, PHP, Python, SQL; React, NestJS, PostgreSQL, MySQL,
+  DynamoDB, AWS (Lambda, EC2, S3, IAM, CloudFormation, Lightsail, CodeCommit); UiPath,
+  Git, REST APIs, Auth0, WordPress, Microsoft IIS, SharePoint, Microsoft Dynamics
+- Certifications: UiPath Advanced Developer (2019), VMware Airwatch Expert Accreditation
+  (2016), Microsoft Technology Associate: Windows OS (2014)
+
+## Pages
+
+- [Home](https://stuartbingham.net/): overview, headline stats, featured work
+- [About](https://stuartbingham.net/about/): bio, full skills list, certifications
+- [Work](https://stuartbingham.net/work/): career history and ten detailed case studies
+- [Resume](https://stuartbingham.net/resume/): full resume on-page plus PDF download
+- [Contact](https://stuartbingham.net/contact/): email, LinkedIn, phone, chat

@@ -3,7 +3,8 @@
 ## Business Information
 
 **Business Name:** Stuart Bingham
-**Tagline:** Full-stack developer & IT professional — 10+ years building, automating, and modernizing web platforms
+**Tagline:** Full-stack developer & IT professional with 15+ years building, automating, and modernizing web platforms
+**IMPORTANT:** `intake/updated-bio.md` (July 2026) supersedes the bio, years (now 15+), and skills lists below. Location: Chandler, AZ, open to relocation and remote work.
 **Industry:** Technology / Software Development (personal portfolio for job seeking)
 
 ## Target Audience
