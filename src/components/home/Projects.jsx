@@ -24,7 +24,7 @@ function Projects() {
             <Container>
                 <Row >
                     <Col xs={12} md={4} className="d-flex justify-content-center align-items-center mb-3 mb-md-0"><Image src="images/soundstrue.webp" fluid></Image></Col>
-                    <Col xs={12} md={8}><h3>Sounds True Online Course Migration</h3><span>For this project, I worked with stakeholders to understand and develop a RPA tool to extract the entire Course Library from their previous e-learning platform and load it into their current one. With the tool, we were able to perform ETL on over 150 courses, each of which had 10 - 100 pages and videos associated with them. The tool has since been used to perform similar migrations on several other e-learning platforms such as <a href="https://psycharmor.org/">PsychArmor</a>, <a href="https://www.functionalmovement.com">Functional Movement</a> and <a href="https://www.golearn.dk/">GoLearn</a></span></Col>
+                    <Col xs={12} md={8}><h3><a href="https://www.soundstrue.com/collections/online-courses?configure%5Bfilters%5D=%28NOT%20tags%3ASearchspring-Exclusions%29%20AND%20collections%3Aonline-courses&configure%5BfacetingAfterDistinct%5D=true&configure%5BclickAnalytics%5D=true">Sounds True Online Course Migration</a></h3><span>For this project, I worked with stakeholders to understand and develop a RPA tool to extract the entire Course Library from their previous e-learning platform and load it into their current one. With the tool, we were able to perform ETL on over 150 courses, each of which had 10 - 100 pages and videos associated with them. The tool has since been used to perform similar migrations on several other e-learning platforms such as <a href="https://psycharmor.org/">PsychArmor</a>, <a href="https://www.functionalmovement.com">Functional Movement</a> and <a href="https://www.golearn.dk/">GoLearn</a></span></Col>
                 </Row>
                 <Row >
                     <Col xs={12} md={4} className="d-flex justify-content-center align-items-center mb-3 mb-md-0"><Image src="images/dhs.png" fluid></Image></Col>
@@ -36,11 +36,14 @@ function Projects() {
             <Container>
                 <Row >
                     <Col xs={12} md={4} className="d-flex justify-content-center align-items-center mb-3 mb-md-0"><Image src="images/Market-Deals-HQ-logo.webp" fluid></Image></Col>
-                    <Col xs={12} md={8} ><h3>Off Market Deals HQ</h3><span>This is a web app developed on the backend by me, and used by realtors on the East Coast to buy and sell fix and flip properties. The process of creating the site involved understanding stakeholder requirements, testing several real estate listing platforms in wordpress, customizing the look and feel of the site, building custom RPA integrations with several CRM platforms to continuously populate the listings and building robust documentation and test suites for continued client management of the site.</span></Col>
+                    <Col xs={12} md={8} ><h3><a href="https://www.omdhq.com/">Off Market Deals HQ</a></h3><span>This is a web app developed on the backend by me, and used by realtors on the East Coast to buy and sell fix and flip properties. The process of creating the site involved understanding stakeholder requirements, testing several real estate listing platforms in wordpress, customizing the look and feel of the site, building custom RPA integrations with several CRM platforms to continuously populate the listings and building robust documentation and test suites for continued client management of the site.</span></Col>
                 </Row>
                 <Row >
                     <Col xs={12} md={4} className="d-flex justify-content-center align-items-center mb-3 mb-md-0"><Image src="images/wcp.png" fluid></Image></Col>
                     <Col xs={12} md={8}><h3>FISH.tech</h3><span>I worked as a backend Developer for FISH, a tool for purchasing and managing fix and flip, rental and property development loans. I oversaw the creation of the datatypes used for storing application information, as well as developed the property analyzer api microservice used by the property analyzer tool in the application.</span></Col>
+                </Row>
+                <Row >
+                    <Col xs={12}><h3>WordPress &amp; LearnPress Site Migrations</h3><span>I led the migration of 13 client websites onto WordPress, using the LearnPress plugin to rebuild course, membership and e-commerce functionality carried over from each site's previous platform. Work included rebuilding site structure and content, customizing themes, and validating functionality post-migration. A few examples of sites migrated include <a href="https://charitygolftoday.com">Charity Golf Today</a>, <a href="https://dixongolf.com">Dixon Golf</a> and <a href="https://redviewsports.com">Redview Sports</a>.</span></Col>
                 </Row>
             </Container>
         </Tab>
