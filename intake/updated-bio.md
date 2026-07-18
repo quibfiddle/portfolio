@@ -24,8 +24,11 @@ Provided by Stuart via Iris on 2026-07-16. Where this conflicts with the resumes
 
 New vs old list: adds SQL emphasis, AWS IAM/Lightsail/CodeCommit, WordPress, SharePoint Development, Microsoft Dynamics Admin & Dev, and the Specialties group. Adds "managing technical services and SLA delivery" as an experience theme.
 
-## LAUNCH BLOCKER
+## Resume PDF vs site years — NOT a blocker (resolved 2026-07-18)
 
-The downloadable resume PDF (`public/Stuart-Bingham-Resume.pdf`) still says "10+ years."
-Stuart needs to supply an updated PDF saying 15+ before launch, or the site and the
-download will contradict each other in front of recruiters.
+The downloadable resume PDF (`public/Stuart-Bingham-Resume.pdf`) says "10+ years"
+and the site says "15+ years." This was originally flagged as a launch blocker, but
+per Iris (2026-07-18) it is intentional: the PDF is the developer-framed resume, so
+10+ counts development experience only; the site's 15+ spans development and IT
+combined. No updated PDF is required. (The PDF also names Charity Golf Today, the
+official employer, while the site uses the approved Dixon Golf attribution.)
