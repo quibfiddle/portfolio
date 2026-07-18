@@ -105,6 +105,9 @@
   };
   const LIVE_WAIT_SECONDS = 90;
   const POLL_INTERVAL_MS = 3000;
+  // sessionStorage (this tab only) so the conversation follows the visitor
+  // across pages, but a fresh visit tomorrow starts a fresh chat.
+  const STORE_KEY = 'chat-state';
 
   const launcher = document.getElementById('chat-launcher') as HTMLButtonElement;
   const windowEl = document.getElementById('chat-window') as HTMLElement;
@@ -130,7 +133,24 @@
     system: { name: '', cls: '' },
   };
 
-  function addLine(from: keyof typeof PROMPTS, text: string) {
+  // Persisted so the conversation survives page navigation.
+  let transcript: { from: keyof typeof PROMPTS; text: string }[] = [];
+  let chatOpen = false;
+  let ended = false;
+  let offerDeadline: number | null = null;
+
+  function saveState() {
+    try {
+      sessionStorage.setItem(
+        STORE_KEY,
+        JSON.stringify({ mode, sessionId, aiHistory, deliveredCount, transcript, chatOpen, ended, offerDeadline })
+      );
+    } catch {
+      /* storage unavailable: chat still works, it just won't follow across pages */
+    }
+  }
+
+  function addLine(from: keyof typeof PROMPTS, text: string, opts: { transient?: boolean; replay?: boolean } = {}) {
     const p = document.createElement('p');
     if (from === 'system') {
       p.className = 'text-terminal-muted';
@@ -147,6 +167,10 @@
     }
     log.appendChild(p);
     log.scrollTop = log.scrollHeight;
+    if (!opts.transient && !opts.replay) {
+      transcript.push({ from, text });
+      saveState();
+    }
     return p;
   }
 
@@ -166,14 +190,18 @@
     log.scrollTop = log.scrollHeight;
   }
 
-  function openChat() {
+  function openChat(focus = true) {
     windowEl.classList.remove('hidden');
     launcher.setAttribute('aria-expanded', 'true');
-    (mode === 'compose' ? nameInput : msgInput).focus();
+    chatOpen = true;
+    saveState();
+    if (focus) (mode === 'compose' ? nameInput : msgInput).focus();
   }
   function closeChat() {
     windowEl.classList.add('hidden');
     launcher.setAttribute('aria-expanded', 'false');
+    chatOpen = false;
+    saveState();
     launcher.focus();
   }
   launcher.addEventListener('click', () => {
@@ -213,6 +241,7 @@
     });
     const data = await res.json();
     aiHistory.push({ role: 'assistant', content: data.reply });
+    saveState();
     return data.reply;
   }
 
@@ -230,6 +259,7 @@
     }
     mode = 'live';
     hint.textContent = 'you are chatting live with Stuart';
+    saveState();
   }
 
   async function pollOnce() {
@@ -241,6 +271,7 @@
       if (newMessages.length > 0) {
         for (const m of newMessages) addLine('stuart', m.text);
         deliveredCount += newMessages.length;
+        saveState();
       }
       if (newMessages.length > 0 || data.status === 'live') goLive();
     } catch {
@@ -256,6 +287,10 @@
   // ============================================================
   // Flow
   // ============================================================
+  function disableComposer() {
+    form.querySelectorAll('input, textarea, button').forEach((el) => ((el as HTMLInputElement).disabled = true));
+  }
+
   function enterAIMode() {
     if (mode === 'live') return;
     mode = 'ai';
@@ -264,16 +299,22 @@
     msgInput.focus();
   }
 
+  function addAIOfferActions() {
+    addAction('[ start AI chat ]', enterAIMode);
+    addAction('[ no thanks, he can text back ]', () => {
+      ended = true;
+      addLine('system', "done. he'll follow up when he's back at a keyboard.");
+      disableComposer();
+    });
+  }
+
   function offerAI() {
     if (mode !== 'waiting') return;
     mode = 'ai-offer';
     addLine('system', 'stuart is away_from_keyboard. your message reached his phone.');
     addLine('system', 'in the meantime, want to ask an AI about his experience?');
-    addAction('[ start AI chat ]', enterAIMode);
-    addAction('[ no thanks, he can text back ]', () => {
-      addLine('system', "done. he'll follow up when he's back at a keyboard.");
-      form.querySelectorAll('input, textarea, button').forEach((el) => ((el as HTMLInputElement).disabled = true));
-    });
+    addAIOfferActions();
+    saveState();
   }
 
   form.addEventListener('submit', async (e) => {
@@ -287,12 +328,15 @@
       addLine('visitor', message);
       msgInput.value = '';
       nameInput.classList.add('hidden');
-      const status = addLine('system', 'sending... [texting stuart]');
+      const status = addLine('system', 'sending... [texting stuart]', { transient: true });
       const session = await apiCreateSession(name, message);
       sessionId = session.sessionId;
-      status.textContent = 'delivered. waiting to see if stuart is around...';
+      status.remove();
+      addLine('system', 'delivered. waiting to see if stuart is around...');
       mode = 'waiting';
+      offerDeadline = Date.now() + LIVE_WAIT_SECONDS * 1000;
       hint.textContent = "you can keep typing, he'll get it all";
+      saveState();
       startPolling();
       awayTimer = setTimeout(offerAI, LIVE_WAIT_SECONDS * 1000);
       return;
@@ -302,7 +346,7 @@
     msgInput.value = '';
 
     if (mode === 'ai') {
-      const thinking = addLine('system', '...');
+      const thinking = addLine('system', '...', { transient: true });
       const reply = await apiAskAI(message);
       thinking.remove();
       addLine('ai', `[AI] ${reply}`);
@@ -310,4 +354,55 @@
       await apiSendLive(message);
     }
   });
+
+  // ============================================================
+  // Restore — rebuild the conversation this tab already started, so
+  // navigating between pages doesn't reset the chat.
+  // ============================================================
+  function restore() {
+    let saved: any = null;
+    try {
+      saved = JSON.parse(sessionStorage.getItem(STORE_KEY) ?? 'null');
+    } catch {
+      return;
+    }
+    if (!saved || typeof saved !== 'object') return;
+
+    mode = saved.mode ?? 'compose';
+    sessionId = saved.sessionId ?? null;
+    aiHistory = Array.isArray(saved.aiHistory) ? saved.aiHistory : [];
+    deliveredCount = saved.deliveredCount ?? 0;
+    transcript = Array.isArray(saved.transcript) ? saved.transcript : [];
+    chatOpen = !!saved.chatOpen;
+    ended = !!saved.ended;
+    offerDeadline = saved.offerDeadline ?? null;
+
+    for (const line of transcript) addLine(line.from, line.text, { replay: true });
+
+    if (mode !== 'compose') {
+      // Name was collected when the session was created; the hidden,
+      // now-empty input must not block later submits.
+      nameInput.classList.add('hidden');
+      nameInput.required = false;
+    }
+
+    if (mode === 'waiting') {
+      hint.textContent = "you can keep typing, he'll get it all";
+      const remaining = (offerDeadline ?? 0) - Date.now();
+      if (remaining <= 0) offerAI();
+      else awayTimer = setTimeout(offerAI, remaining);
+    } else if (mode === 'ai-offer' && !ended) {
+      addAIOfferActions();
+    } else if (mode === 'ai') {
+      hint.textContent = 'AI responses are generated. For the real Stuart, use the Contact page.';
+    } else if (mode === 'live') {
+      hint.textContent = 'you are chatting live with Stuart';
+    }
+
+    if (ended) disableComposer();
+    if (sessionId) startPolling();
+    if (chatOpen) openChat(false);
+  }
+
+  restore();
 </script>

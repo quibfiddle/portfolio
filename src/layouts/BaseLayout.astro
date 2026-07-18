@@ -5,6 +5,7 @@ import StructuredData from '../components/StructuredData.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ChatWidget from '../components/ChatWidget.astro';
+import PartyPopup from '../components/PartyPopup.astro';
 
 interface Props {
   title: string;
@@ -30,7 +31,7 @@ const personData = {
   image: new URL('/images/StuartBingham-800.jpg', Astro.site).href,
   worksFor: {
     '@type': 'Organization',
-    name: 'Charity Golf Today',
+    name: 'Dixon Golf',
   },
   knowsAbout: [
     'Full-Stack Development',
@@ -118,5 +119,6 @@ const personData = {
     </div>
 
     <ChatWidget />
+    <PartyPopup />
   </body>
 </html>

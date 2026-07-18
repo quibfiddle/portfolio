@@ -215,7 +215,7 @@ const commands: Command[] = [
       if (file === 'resume.txt') {
         ctx.print('Stuart Bingham, Senior Software Engineer & Automation Specialist');
         ctx.print('15+ years across development, automation, and IT infrastructure.');
-        ctx.print('Current: Software Developer @ Charity Golf Today, Chandler, AZ.');
+        ctx.print('Current: Software Developer @ Dixon Golf, Chandler, AZ.');
         ctx.print('Highlights: 22 automation tools, 4 custom APIs, 124,000+ endpoints migrated.');
         ctx.print("run 'open resume' or download: /Stuart-Bingham-Resume.pdf", MUTED);
         return;

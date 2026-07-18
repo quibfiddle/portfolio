@@ -4,8 +4,8 @@ import TerminalCard from '../components/TerminalCard.astro';
 
 const stats = [
   { value: '15+', label: 'Years experience' },
-  { value: '14', label: 'Client companies supported' },
-  { value: '30x', label: 'Query performance gains' },
+  { value: '100s', label: 'Companies supported across the U.S.' },
+  { value: '22', label: 'Custom automation tools built' },
   { value: '124K', label: 'Endpoints migrated' },
 ];
 
@@ -25,7 +25,7 @@ const capabilities = [
     route: '$ /automation',
     title: 'Automation & RPA',
     description:
-      'I analyze workflows and design automation that makes things simpler, built on experience supporting hundreds of companies across the US.',
+      'I analyze workflows and design automation that makes things simpler, built on experience spanning a wide range of industries.',
     bullets: [
       'UiPath Advanced Developer certified',
       '22 custom automation & analysis tools',
@@ -102,7 +102,7 @@ const projects = [
 
         <ul class="mt-6 space-y-2 text-sm text-text-muted">
           <li><span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> 15+ years across development, automation &amp; infrastructure</li>
-          <li><span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> Currently: Software Developer @ Charity Golf Today</li>
+          <li><span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> Currently: Software Developer @ Dixon Golf</li>
           <li><span class="font-mono text-accent-text" aria-hidden="true">&gt;</span> Chandler, AZ &middot; open to remote &amp; relocation</li>
         </ul>
 
@@ -162,8 +162,8 @@ const projects = [
             <p class="mt-2 text-text-muted">{card.description}</p>
             <ul class="mt-4 space-y-1.5">
               {card.bullets.map((bullet) => (
-                <li class="text-sm text-text-muted">
-                  <span class="font-mono text-accent-text" aria-hidden="true">&rarr;</span> {bullet}
+                <li class="flex gap-2 text-sm text-text-muted">
+                  <span class="shrink-0 font-mono text-accent-text" aria-hidden="true">&rarr;</span> {bullet}
                 </li>
               ))}
             </ul>

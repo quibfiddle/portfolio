@@ -5,10 +5,10 @@ const experience = [
   {
     dates: '[ 10/2024 – now ]',
     title: 'Software Developer',
-    company: 'Charity Golf Today',
+    company: 'Dixon Golf',
     location: 'Chandler, AZ',
     bullets: [
-      'Development and platform support for 14 client companies, including Dixon Golf and their brands',
+      'Development and platform support for Dixon Golf and their brands — 14 client companies in all',
       'Claude-powered lead analysis (+40% qualified leads), PHP 7.x to 8.3 and MySQL/MariaDB modernization (up to 50% faster loads, 30x query gains), Git-based deployment workflow across 13 sites',
     ],
   },
@@ -150,8 +150,8 @@ const certifications = [
               {role.bullets.length > 0 && (
                 <ul class="mt-3 space-y-1.5">
                   {role.bullets.map((bullet) => (
-                    <li class="text-sm text-text-muted">
-                      <span class="font-mono text-accent-text" aria-hidden="true">&rarr;</span> {bullet}
+                    <li class="flex gap-2 text-sm text-text-muted">
+                      <span class="shrink-0 font-mono text-accent-text" aria-hidden="true">&rarr;</span> {bullet}
                     </li>
                   ))}
                 </ul>

@@ -6,12 +6,12 @@ const roles = [
   {
     dates: '[ 10/2024 – now ]',
     title: 'Software Developer',
-    company: 'Charity Golf Today',
+    company: 'Dixon Golf',
     location: 'Chandler, AZ',
-    logo: null,
+    logo: { src: '/images/DixonGolf.png', width: 600, height: 150 },
     current: true,
     bullets: [
-      'Develop and support platforms for 14 client companies, including Dixon Golf and their brands',
+      'Develop and support platforms for Dixon Golf and their brands — 14 client companies in all',
       'Built a Claude-powered lead analysis tool that increased qualified leads by about 40%',
       'Modernized legacy infrastructure: PHP 7.x to 8.3 and a patched MySQL/MariaDB, cutting page loads by up to 50% with query improvements up to 30x',
       'Moved 13 legacy sites from FTP editing into Git repositories with automatic webhook deployments, and trained the team on the new workflow',
@@ -93,7 +93,12 @@ const projects = [
     title: 'AI-Powered Lead Analysis',
     cats: ['ai'],
     tags: ['ai', 'automation', 'claude'],
-    image: null,
+    image: {
+      src: '/images/card-lead-analysis.svg',
+      width: 800,
+      height: 450,
+      alt: 'Terminal diagram: scraped leads flow through Claude vision and a junk filter, increasing qualified leads by 40%',
+    },
     description:
       'The previous lead-scraping tool for Dixon Golf and their brands produced junk leads it couldn’t see through. I built an AI scraping tool with Claude that interacts with JavaScript buttons to reveal hidden information, uses vision to read text out of images, and analyzes each page to throw out bad leads, increasing qualified leads by about 40%.',
   },
@@ -101,7 +106,12 @@ const projects = [
     title: 'Legacy Platform Modernization',
     cats: ['it', 'web'],
     tags: ['php 8.3', 'mysql/mariadb', 'it'],
-    image: null,
+    image: {
+      src: '/images/card-platform-modernization.svg',
+      width: 800,
+      height: 450,
+      alt: 'Terminal output: PHP 7.x to 8.3 and MariaDB migration cut page loads 50% and took queries from 24 seconds to under 1 second, a 30x gain',
+    },
     description:
       'An aging server on end-of-life software ran critical infrastructure for Dixon Golf and several sister companies. I migrated the database layer to a patched MySQL/MariaDB and updated or migrated every site from PHP 7.x (some as old as 7.0) to PHP 8.3, cutting average page loads by up to 50% and taking queries that ran 24 to 30 seconds down to sub-second, a 30x improvement.',
   },
@@ -109,7 +119,12 @@ const projects = [
     title: 'Git-Based Deployment Workflow',
     cats: ['web'],
     tags: ['git', 'devops', 'process'],
-    image: null,
+    image: {
+      src: '/images/card-git-deploy.svg',
+      width: 800,
+      height: 450,
+      alt: 'Terminal diagram: git push triggers a webhook that auto-deploys to production across 13 version-controlled sites',
+    },
     description:
       'Thirteen legacy sites were edited directly on the production server over FTP, with no source control. I moved every site into its own Git repository, created webhooks that automatically deploy to production on push, and trained developers who were new to Git on the day-to-day workflows they needed. The result: 13 sites consolidated into standardized, version-controlled deployments.',
     links: [
@@ -122,7 +137,12 @@ const projects = [
     title: '30,000-Device Deployment Automation',
     cats: ['it'],
     tags: ['vbscript', 'automation', 'it'],
-    image: null,
+    image: {
+      src: '/images/card-device-automation.svg',
+      width: 800,
+      height: 450,
+      alt: 'Terminal output: automated deployments across 30,000+ managed devices with 99% uptime for healthcare and power-generation clients',
+    },
     description:
       'At TeamLogicIT I automated deployments and managed tools for over 30,000 devices using VBScript and KML scripting, managed web applications for clients in healthcare and power generation with 99% uptime, and provided advanced technical support for web applications and automation tools.',
   },
@@ -144,7 +164,12 @@ const projects = [
     title: 'DHS Acquisition Program Baseline Cataloging',
     cats: ['rpa'],
     tags: ['rpa', 'uipath', 'computer vision'],
-    image: { src: '/images/dhs.png', width: 225, height: 225, alt: 'Department of Homeland Security seal' },
+    image: {
+      src: '/images/card-dhs-apb.svg',
+      width: 800,
+      height: 450,
+      alt: 'Terminal diagram: scanned PDF documents flow through UiPath computer vision into an APB metadata database recording name, budget, and completion',
+    },
     description:
       'DHS manages projects through Acquisition Program Baseline (APB) documents that measure program cost, schedule, and performance. The documents were often PDFs that had been printed, written on, scanned, and saved again. Using UiPath, I demonstrated our ability to iterate through a provided set of documents, use computer vision to extract their text contents, and store metadata about each APB, such as name, budget, and expected completion, in a database.',
   },
@@ -177,7 +202,12 @@ const projects = [
     title: 'AVG to Bitdefender Managed Antivirus Migration',
     cats: ['it'],
     tags: ['it', 'endpoint security', '124k endpoints'],
-    image: { src: '/images/AVGtoBitdefender-800.jpg', width: 800, height: 558, alt: 'AVG to Bitdefender migration illustration' },
+    image: {
+      src: '/images/card-av-migration.svg',
+      width: 800,
+      height: 450,
+      alt: 'Terminal output: AVG to Bitdefender cut-over deployed to 124,000+ endpoints with 800+ engineers trained',
+    },
     description:
       'At Allcovered I was the SME for deploying and maintaining Kaseya Antivirus (managed AVG) and Kaseya Endpoint Security (managed Malwarebytes). I vetted several cloud-managed antivirus solutions against our criteria as a national MSP, designed and wrote the scripts to uninstall AVG or competing antivirus, install Bitdefender, and register each endpoint in our management platform. I wrote documentation, led training sessions with over 800 engineers, and deployed the cut-over script on more than 124,000 endpoints.',
   },
@@ -213,10 +243,10 @@ const projects = [
                   width={role.logo.width}
                   height={role.logo.height}
                   loading="lazy"
-                  class="h-10 w-10 shrink-0 rounded-md object-contain"
+                  class="h-10 w-auto max-w-[140px] shrink-0 rounded-md bg-white p-1.5 object-contain"
                 />
               )}
-              <span class="min-w-0 flex-1">
+              <span class="min-w-[12rem] flex-1">
                 <span class="block text-h3 font-bold text-text">{role.title}</span>
                 <span class="mt-0.5 block text-sm text-text-muted">{role.company} &middot; {role.location}</span>
               </span>
@@ -228,8 +258,8 @@ const projects = [
             </summary>
             <ul class="space-y-2 px-6 pb-6 pt-0">
               {role.bullets.map((bullet) => (
-                <li class="text-sm text-text-muted">
-                  <span class="font-mono text-accent-text" aria-hidden="true">&rarr;</span> {bullet}
+                <li class="flex gap-2 text-sm text-text-muted">
+                  <span class="shrink-0 font-mono text-accent-text" aria-hidden="true">&rarr;</span> {bullet}
                 </li>
               ))}
             </ul>

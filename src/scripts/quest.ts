@@ -137,7 +137,9 @@ class Game {
   private renderScene() {
     const scene = this.scene();
     this.ctx.print(' ');
-    for (const line of scene.text) this.ctx.print(line);
+    // Scene text is hard-wrapped in quest-data for readability there;
+    // join it so the terminal wraps at its own width instead.
+    this.ctx.print(scene.text.join(' '));
     this.visibleChoices().forEach((choice, i) => {
       this.ctx.printSegs([{ t: `  ${i + 1}. `, c: GREEN }, { t: choice.label }]);
     });
@@ -167,7 +169,7 @@ class Game {
       this.apply(this.meets(action.branch.if) ? action.branch.then : action.branch.else);
       return;
     }
-    if (action.print) for (const line of action.print) this.ctx.print(line);
+    if (action.print) this.ctx.print(action.print.join(' '));
     if (action.setFlags) {
       for (const flag of action.setFlags) {
         if (!this.state.flags.includes(flag)) this.state.flags.push(flag);
@@ -224,7 +226,7 @@ class Game {
       if (scene.enter.loseRandomItem) this.loseRandomItem();
       // Enter effects run before the scene text; supports print/items/flags.
       const { loseRandomItem: _skip, goto: _g, ending: _e, roll: _r, ...rest } = scene.enter;
-      if (rest.print) for (const line of rest.print) this.ctx.print(line);
+      if (rest.print) this.ctx.print(rest.print.join(' '));
       if (rest.setFlags) {
         for (const flag of rest.setFlags) {
           if (!this.state.flags.includes(flag)) this.state.flags.push(flag);
@@ -301,7 +303,7 @@ class Game {
   private endGame(endingId: string) {
     const ending = ENDINGS[endingId];
     this.ctx.print(' ');
-    for (const line of ending.text) this.ctx.print(line);
+    this.ctx.print(ending.text.join(' '));
     let found = loadEndings();
     if (!found.includes(endingId)) found = [...found, endingId];
     try {
@@ -310,7 +312,6 @@ class Game {
     } catch {
       /* storage unavailable */
     }
-    this.ctx.print(' ');
     this.ctx.print(`quest complete. endings found: ${found.length}/${Object.keys(ENDINGS).length}.`, MUTED);
     this.ctx.print(EPILOGUE_TIEBACK, MUTED);
     this.ctx.exitMode();

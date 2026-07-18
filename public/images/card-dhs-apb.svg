@@ -1,0 +1,32 @@
+<svg width="800" height="450" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" font-family="Ubuntu Mono, SFMono-Regular, Menlo, Consolas, monospace">
+  <rect x="1" y="1" width="798" height="448" rx="14" fill="#300a24" stroke="#ffffff" stroke-opacity="0.14"/>
+  <path d="M1 15 Q1 1 15 1 H785 Q799 1 799 15 V46 H1 Z" fill="#3d1230"/>
+  <text x="400" y="29" text-anchor="middle" font-size="15" fill="#AEA79F">apb-cataloger &#8212; uipath</text>
+  <circle cx="712" cy="23.5" r="9" fill="#ffffff" fill-opacity="0.10"/>
+  <text x="712" y="28" text-anchor="middle" font-size="13" fill="#AEA79F">&#8211;</text>
+  <circle cx="740" cy="23.5" r="9" fill="#ffffff" fill-opacity="0.10"/>
+  <text x="740" y="27" text-anchor="middle" font-size="10" fill="#AEA79F">&#9633;</text>
+  <circle cx="768" cy="23.5" r="9" fill="#E95420"/>
+  <text x="768" y="28" text-anchor="middle" font-size="13" fill="#ffffff">&#215;</text>
+
+  <text x="48" y="106" font-size="21"><tspan fill="#AEA79F">$ </tspan><tspan fill="#f7f4ed">catalog-apb --input scans/</tspan></text>
+
+  <!-- pipeline -->
+  <rect x="80" y="180" width="170" height="70" rx="10" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.14"/>
+  <text x="165" y="209" text-anchor="middle" font-size="19" fill="#f7f4ed">scanned pdfs</text>
+  <text x="165" y="233" text-anchor="middle" font-size="14" fill="#AEA79F">printed + rescanned</text>
+
+  <text x="285" y="222" text-anchor="middle" font-size="26" fill="#AEA79F">&#8594;</text>
+
+  <rect x="320" y="180" width="170" height="70" rx="10" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.14"/>
+  <text x="405" y="209" text-anchor="middle" font-size="19" fill="#f7f4ed">uipath + cv</text>
+  <text x="405" y="233" text-anchor="middle" font-size="14" fill="#AEA79F">text extraction</text>
+
+  <text x="525" y="222" text-anchor="middle" font-size="26" fill="#AEA79F">&#8594;</text>
+
+  <rect x="560" y="180" width="170" height="70" rx="10" fill="#ffffff" fill-opacity="0.08" stroke="#8ae234" stroke-opacity="0.55"/>
+  <text x="645" y="209" text-anchor="middle" font-size="19" fill="#f7f4ed">apb database</text>
+  <text x="645" y="233" text-anchor="middle" font-size="14" fill="#AEA79F">metadata</text>
+
+  <text x="48" y="352" font-size="22" fill="#AEA79F">extracted: <tspan font-size="26" font-weight="bold" fill="#f77148">name &#183; budget &#183; completion</tspan></text>
+</svg>

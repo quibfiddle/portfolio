@@ -3,7 +3,7 @@
 > Stuart Bingham is a senior software engineer and automation specialist in Chandler,
 > Arizona (open to relocation and remote work) with 15+ years of experience across
 > full-stack development, workflow automation and RPA, cloud infrastructure, and IT.
-> He is currently a Software Developer at Charity Golf Today and is open to new
+> He is currently a Software Developer at Dixon Golf and is open to new
 > opportunities. Contact: bingham.stuart@gmail.com | (480) 498-8273 |
 > https://www.linkedin.com/in/stuart-bingham-6267356a/
 
@@ -13,7 +13,7 @@ background. Resume PDF: https://stuartbingham.net/Stuart-Bingham-Resume.pdf
 ## Key facts
 
 - 15+ years in software development, automation, and IT (career start 2010)
-- Current role: Software Developer at Charity Golf Today, Chandler AZ (Oct 2024-present),
+- Current role: Software Developer at Dixon Golf, Chandler AZ (Oct 2024-present),
   supporting web platforms for 14 client companies
 - Previous: Lead Developer, Automation & API Development at Proveo Automation (2019-2024);
   Automation Developer at TeamLogicIT (2017-2019); Service Design & Transition Engineer
