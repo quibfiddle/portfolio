@@ -91,7 +91,7 @@ class Game {
     this.ctx.enterMode({ name: 'quest', onInput: (raw) => this.onInput(raw) });
     this.ctx.printSegs([{ t: TITLE, c: ORANGE }]);
     for (const line of INTRO) this.ctx.print(line, MUTED);
-    if (this.resumed) this.ctx.print('resuming where you left off...', MUTED);
+    if (this.resumed) this.ctx.print("resuming where you left off... type 'restart' to start over.", MUTED);
     this.renderScene();
     this.save();
   }
@@ -157,7 +157,7 @@ class Game {
   private printGameHelp() {
     this.ctx.print('type the number of a choice.', MUTED);
     this.ctx.print("'bag' shows your pack, 'look' reprints the scene,", MUTED);
-    this.ctx.print("'quit' leaves the quest (progress is saved).", MUTED);
+    this.ctx.print("'restart' starts over, 'quit' leaves the quest (progress is saved).", MUTED);
   }
 
   // ------------------------------------------------------------
@@ -328,6 +328,15 @@ class Game {
     // Pending sub-states first
     if (this.pending?.type === 'rolling') {
       this.ctx.print('the die is still tumbling.', MUTED);
+      return;
+    }
+    // Restart works from anywhere except mid-roll (clears any pending prompt).
+    if (input === 'restart' || input === 'reset') {
+      this.pending = null;
+      this.state = { scene: START_SCENE, inv: [], flags: [] };
+      this.save();
+      this.ctx.print('the story resets.', MUTED);
+      this.renderScene();
       return;
     }
     if (this.pending?.type === 'quit') {
