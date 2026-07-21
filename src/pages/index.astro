@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TerminalCard from '../components/TerminalCard.astro';
+import { SHOW_LEAD_ANALYSIS_PROJECT } from '../config/flags';
 
 const stats = [
   { value: '15+', label: 'Years experience' },
@@ -32,17 +33,21 @@ const capabilities = [
       '4 custom APIs built to tie systems together',
     ],
   },
-  {
-    route: '$ /ai-tooling',
-    title: 'AI-Powered Tooling',
-    description:
-      'Practical AI that pays for itself: a Claude-based lead analysis system that filters junk leads automatically.',
-    bullets: [
-      'Claude vision reads text out of images',
-      'Interacts with JavaScript to reveal hidden info',
-      '+40% qualified leads',
-    ],
-  },
+  ...(SHOW_LEAD_ANALYSIS_PROJECT
+    ? [
+        {
+          route: '$ /ai-tooling',
+          title: 'AI-Powered Tooling',
+          description:
+            'Practical AI that pays for itself: a Claude-based lead analysis system that filters junk leads automatically.',
+          bullets: [
+            'Claude vision reads text out of images',
+            'Interacts with JavaScript to reveal hidden info',
+            '+40% qualified leads',
+          ],
+        },
+      ]
+    : []),
   {
     route: '$ /infrastructure',
     title: 'IT & Infrastructure',
@@ -57,12 +62,16 @@ const capabilities = [
 ];
 
 const projects = [
-  {
-    title: 'AI-Powered Lead Analysis',
-    tags: ['ai', 'automation', 'claude'],
-    description:
-      'The previous lead-scraping tool couldn’t see through junk leads. I built a Claude-powered analyzer for Dixon Golf and their brands that clicks through JavaScript buttons to reveal hidden information, uses vision to read text out of images, and throws out bad leads automatically, increasing qualified leads by about 40%.',
-  },
+  ...(SHOW_LEAD_ANALYSIS_PROJECT
+    ? [
+        {
+          title: 'AI-Powered Lead Analysis',
+          tags: ['ai', 'automation', 'claude'],
+          description:
+            'The previous lead-scraping tool couldn’t see through junk leads. I built a Claude-powered analyzer for Dixon Golf and their brands that clicks through JavaScript buttons to reveal hidden information, uses vision to read text out of images, and throws out bad leads automatically, increasing qualified leads by about 40%.',
+        },
+      ]
+    : []),
   {
     title: 'Legacy Platform Modernization',
     tags: ['php 8.3', 'mysql/mariadb', 'it'],
@@ -179,7 +188,7 @@ const projects = [
       <p class="kicker">Portfolio</p>
       <h2 id="work-heading" class="mt-2">Selected projects</h2>
       <p class="lead mt-4">
-        Real problems, measurable results: a few recent highlights from ten case studies across development, automation, and IT.
+        Real problems, measurable results: a few recent highlights from {SHOW_LEAD_ANALYSIS_PROJECT ? 'ten' : 'nine'} case studies across development, automation, and IT.
       </p>
 
       <div class="mt-10 grid gap-6 lg:grid-cols-3">
@@ -209,7 +218,7 @@ const projects = [
           href="/work/"
           class="inline-flex items-center rounded-lg border border-border bg-surface px-6 py-3 text-sm font-bold uppercase tracking-(--tracking-kicker) text-text transition hover:border-(--tint-accent-border-strong) hover:text-accent-text hover:shadow-(--shadow-glow-sm) focus-visible:shadow-(--shadow-glow-sm)"
         >
-          View all 10 projects
+          View all {SHOW_LEAD_ANALYSIS_PROJECT ? '10' : '9'} projects
         </a>
       </div>
     </div>

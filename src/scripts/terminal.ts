@@ -12,6 +12,7 @@
 //   live prompt line, so both terminals share one source of truth.
 
 import { resetQuest, startQuest } from './quest';
+import { SHOW_LEAD_ANALYSIS_PROJECT } from '../config/flags';
 
 const GREEN = 'text-terminal-green';
 const ORANGE = 'text-terminal-orange';
@@ -65,7 +66,7 @@ const PAGES: Record<string, string> = {
 };
 
 const PROJECT_TITLES = [
-  'AI-Powered Lead Analysis',
+  ...(SHOW_LEAD_ANALYSIS_PROJECT ? ['AI-Powered Lead Analysis'] : []),
   'Legacy Platform Modernization',
   'Git-Based Deployment Workflow',
   '30,000-Device Deployment Automation',

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SHOW_LEAD_ANALYSIS_PROJECT } from '../config/flags';
 
 const experience = [
   {
@@ -9,7 +10,9 @@ const experience = [
     location: 'Chandler, AZ',
     bullets: [
       'Development and platform support for 14 client companies, including Dixon Golf and their brands',
-      'Claude-powered lead analysis (+40% qualified leads), PHP 7.x to 8.3 and MySQL/MariaDB modernization (up to 50% faster loads, 30x query gains), Git-based deployment workflow across 13 sites',
+      SHOW_LEAD_ANALYSIS_PROJECT
+        ? 'Claude-powered lead analysis (+40% qualified leads), PHP 7.x to 8.3 and MySQL/MariaDB modernization (up to 50% faster loads, 30x query gains), Git-based deployment workflow across 13 sites'
+        : 'PHP 7.x to 8.3 and MySQL/MariaDB modernization (up to 50% faster loads, 30x query gains), Git-based deployment workflow across 13 sites',
     ],
   },
   {
@@ -125,7 +128,7 @@ const certifications = [
           scalable systems, modernizing infrastructure, and delivering automation solutions across a
           wide range of industries. Proven modernizer: legacy PHP migrations with up to 50% faster page
           loads and 30x query performance improvements. Builder of real tools: 22 custom automation and
-          analysis tools (UiPath, TypeScript), 4 custom APIs, and AI-based lead generation systems.
+          analysis tools (UiPath, TypeScript){SHOW_LEAD_ANALYSIS_PROJECT ? ', 4 custom APIs, and AI-based lead generation systems.' : ' and 4 custom APIs.'}
           Operates at scale: 14 client companies currently, and 30,000 to 124,000+ managed devices in
           past roles. Based in Chandler, AZ, open to relocation and remote work.
         </p>

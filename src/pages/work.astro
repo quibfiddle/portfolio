@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SHOW_LEAD_ANALYSIS_PROJECT } from '../config/flags';
 
 // Roles with resume-sourced bullets get accordions; the last three are one-liners.
 const roles = [
@@ -12,7 +13,9 @@ const roles = [
     current: true,
     bullets: [
       'Develop and support platforms for 14 client companies, including Dixon Golf and their brands',
-      'Built a Claude-powered lead analysis tool that increased qualified leads by about 40%',
+      ...(SHOW_LEAD_ANALYSIS_PROJECT
+        ? ['Built a Claude-powered lead analysis tool that increased qualified leads by about 40%']
+        : []),
       'Modernized legacy infrastructure: PHP 7.x to 8.3 and a patched MySQL/MariaDB, cutting page loads by up to 50% with query improvements up to 30x',
       'Moved 13 legacy sites from FTP editing into Git repositories with automatic webhook deployments, and trained the team on the new workflow',
     ],
@@ -81,7 +84,7 @@ const compactRoles = [
 
 const filters = [
   { id: 'all', label: 'all' },
-  { id: 'ai', label: 'ai' },
+  ...(SHOW_LEAD_ANALYSIS_PROJECT ? [{ id: 'ai', label: 'ai' }] : []),
   { id: 'rpa', label: 'rpa' },
   { id: 'web', label: 'web' },
   { id: 'api', label: 'api' },
@@ -89,14 +92,18 @@ const filters = [
 ];
 
 const projects = [
-  {
-    title: 'AI-Powered Lead Analysis',
-    cats: ['ai'],
-    tags: ['ai', 'automation', 'claude'],
-    image: null,
-    description:
-      'The previous lead-scraping tool for Dixon Golf and their brands produced junk leads it couldn’t see through. I built an AI scraping tool with Claude that interacts with JavaScript buttons to reveal hidden information, uses vision to read text out of images, and analyzes each page to throw out bad leads, increasing qualified leads by about 40%.',
-  },
+  ...(SHOW_LEAD_ANALYSIS_PROJECT
+    ? [
+        {
+          title: 'AI-Powered Lead Analysis',
+          cats: ['ai'],
+          tags: ['ai', 'automation', 'claude'],
+          image: null,
+          description:
+            'The previous lead-scraping tool for Dixon Golf and their brands produced junk leads it couldn’t see through. I built an AI scraping tool with Claude that interacts with JavaScript buttons to reveal hidden information, uses vision to read text out of images, and analyzes each page to throw out bad leads, increasing qualified leads by about 40%.',
+        },
+      ]
+    : []),
   {
     title: 'Legacy Platform Modernization',
     cats: ['it', 'web'],
@@ -186,7 +193,9 @@ const projects = [
 
 <BaseLayout
   title="Work & Experience | Stuart Bingham, Automation Specialist"
-  description="Stuart Bingham's career across development, automation, and IT: ten case studies, from Claude-powered lead analysis to a 124K-endpoint security migration."
+  description={SHOW_LEAD_ANALYSIS_PROJECT
+    ? "Stuart Bingham's career across development, automation, and IT: ten case studies, from Claude-powered lead analysis to a 124K-endpoint security migration."
+    : "Stuart Bingham's career across development, automation, and IT: nine case studies, from a 124K-endpoint security migration to a Git-based deployment workflow."}
 >
   <!-- ============ EXPERIENCE ============ -->
   <section class="px-4 py-11 sm:px-5 md:py-14 lg:py-20" aria-labelledby="experience-heading">
@@ -195,7 +204,7 @@ const projects = [
         <p class="kicker">Career</p>
         <h1 id="experience-heading" class="mt-2">Experience &amp; projects</h1>
         <p class="lead mx-auto mt-4">
-          Seven roles and ten case studies across development, automation, and IT infrastructure.
+          Seven roles and {SHOW_LEAD_ANALYSIS_PROJECT ? 'ten' : 'nine'} case studies across development, automation, and IT infrastructure.
         </p>
       </div>
 

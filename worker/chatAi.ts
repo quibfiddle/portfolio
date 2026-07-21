@@ -3,9 +3,13 @@
 // contract (POST /api/chat/ai -> { reply }), so this can be replaced in
 // isolation with no frontend changes.
 
+import { SHOW_LEAD_ANALYSIS_PROJECT } from '../src/config/flags';
+
 const CANNED_REPLIES = [
   "Stuart has spent 15+ years across full-stack development, automation, and IT. Ask me about his projects, stack, or experience.",
-  'One highlight: he built a Claude-powered lead analysis tool that lifted qualified leads by about 40%. The write-up is on the Work page.',
+  ...(SHOW_LEAD_ANALYSIS_PROJECT
+    ? ['One highlight: he built a Claude-powered lead analysis tool that lifted qualified leads by about 40%. The write-up is on the Work page.']
+    : []),
   'His core stack is JavaScript/TypeScript, PHP, and Python, with React, AWS, and a deep RPA background (UiPath).',
   "For anything specific, the Contact page reaches him directly. He usually replies within a day.",
 ];
