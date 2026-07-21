@@ -1,9 +1,10 @@
 ---
 // component-builder: ChatWidget
-// Purpose: "Chat with me" terminal window. Live-chat-with-Stuart flow with an
-// AI-persona fallback when he's away. Backend intentionally stubbed:
-// DEMO_MODE in the script fakes all four endpoints so the full flow is
-// clickable for design review. Integration guide: docs/chat-widget.md
+// Purpose: "Chat with me" terminal window. Live-chat-with-Stuart flow; if he
+// doesn't reply in time, the widget recommends emailing him directly.
+// Backend intentionally stubbed: DEMO_MODE in the script fakes all three
+// endpoints so the full flow is clickable for design review.
+// Integration guide: docs/chat-widget.md
 ---
 
 <div class="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
@@ -101,10 +102,10 @@
     session: '/api/chat/session',
     send: '/api/chat/send',
     poll: '/api/chat/poll',
-    ai: '/api/chat/ai',
   };
   const LIVE_WAIT_SECONDS = 90;
   const POLL_INTERVAL_MS = 3000;
+  const EMAIL = 'bingham.stuart@gmail.com';
 
   const launcher = document.getElementById('chat-launcher') as HTMLButtonElement;
   const windowEl = document.getElementById('chat-window') as HTMLElement;
@@ -115,10 +116,9 @@
   const msgInput = document.getElementById('chat-input') as HTMLTextAreaElement;
   const hint = document.getElementById('chat-hint') as HTMLElement;
 
-  type Mode = 'compose' | 'waiting' | 'live' | 'ai-offer' | 'ai';
+  type Mode = 'compose' | 'waiting' | 'live';
   let mode: Mode = 'compose';
   let sessionId: string | null = null;
-  let aiHistory: { role: string; content: string }[] = [];
   let deliveredCount = 0;
   let awayTimer: ReturnType<typeof setTimeout> | null = null;
   let pollTimer: ReturnType<typeof setInterval> | null = null;
@@ -126,7 +126,6 @@
   const PROMPTS: Record<string, { name: string; cls: string }> = {
     visitor: { name: 'you@guest', cls: 'text-terminal-orange' },
     stuart: { name: 'stuart@stuartbingham', cls: 'text-terminal-green' },
-    ai: { name: 'ai@stuartbingham', cls: 'text-terminal-muted' },
     system: { name: '', cls: '' },
   };
 
@@ -150,19 +149,20 @@
     return p;
   }
 
-  function addAction(label: string, onClick: () => void) {
-    const wrap = document.createElement('p');
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className =
-      'rounded-lg border border-(--tint-terminal-border) px-3 py-1.5 font-mono text-sm text-terminal-orange transition-colors hover:bg-(--tint-terminal-well)';
-    btn.textContent = label;
-    btn.addEventListener('click', () => {
-      wrap.remove();
-      onClick();
-    });
-    wrap.appendChild(btn);
-    log.appendChild(wrap);
+  function addEmailLine() {
+    const p = document.createElement('p');
+    p.className = 'text-terminal-muted';
+    p.append(
+      document.createTextNode(
+        "stuart is away_from_keyboard. your message reached his phone — for a faster reply, email ",
+      ),
+    );
+    const a = document.createElement('a');
+    a.href = `mailto:${EMAIL}`;
+    a.textContent = EMAIL;
+    a.className = 'text-terminal-orange underline hover:no-underline';
+    p.append(a, document.createTextNode('.'));
+    log.appendChild(p);
     log.scrollTop = log.scrollHeight;
   }
 
@@ -204,18 +204,6 @@
     });
   }
 
-  async function apiAskAI(message: string): Promise<string> {
-    aiHistory.push({ role: 'user', content: message });
-    const res = await fetch(ENDPOINTS.ai, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId, messages: aiHistory }),
-    });
-    const data = await res.json();
-    aiHistory.push({ role: 'assistant', content: data.reply });
-    return data.reply;
-  }
-
   // ============================================================
   // Polling — runs for the life of the chat once a session exists, so
   // Stuart's Telegram replies keep arriving whether we're still waiting
@@ -223,7 +211,6 @@
   // ============================================================
   function goLive() {
     if (mode === 'live') return;
-    if (mode === 'ai' || mode === 'ai-offer') addLine('system', 'stuart is here now.');
     if (awayTimer) {
       clearTimeout(awayTimer);
       awayTimer = null;
@@ -256,24 +243,9 @@
   // ============================================================
   // Flow
   // ============================================================
-  function enterAIMode() {
-    if (mode === 'live') return;
-    mode = 'ai';
-    hint.textContent = 'AI responses are generated. For the real Stuart, use the Contact page.';
-    addLine('ai', "[AI] Hi, I'm an assistant that knows Stuart's work. What would you like to know?");
-    msgInput.focus();
-  }
-
-  function offerAI() {
+  function recommendEmail() {
     if (mode !== 'waiting') return;
-    mode = 'ai-offer';
-    addLine('system', 'stuart is away_from_keyboard. your message reached his phone.');
-    addLine('system', 'in the meantime, want to ask an AI about his experience?');
-    addAction('[ start AI chat ]', enterAIMode);
-    addAction('[ no thanks, he can text back ]', () => {
-      addLine('system', "done. he'll follow up when he's back at a keyboard.");
-      form.querySelectorAll('input, textarea, button').forEach((el) => ((el as HTMLInputElement).disabled = true));
-    });
+    addEmailLine();
   }
 
   form.addEventListener('submit', async (e) => {
@@ -294,20 +266,12 @@
       mode = 'waiting';
       hint.textContent = "you can keep typing, he'll get it all";
       startPolling();
-      awayTimer = setTimeout(offerAI, LIVE_WAIT_SECONDS * 1000);
+      awayTimer = setTimeout(recommendEmail, LIVE_WAIT_SECONDS * 1000);
       return;
     }
 
     addLine('visitor', message);
     msgInput.value = '';
-
-    if (mode === 'ai') {
-      const thinking = addLine('system', '...');
-      const reply = await apiAskAI(message);
-      thinking.remove();
-      addLine('ai', `[AI] ${reply}`);
-    } else {
-      await apiSendLive(message);
-    }
+    await apiSendLive(message);
   });
 </script>

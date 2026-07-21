@@ -14,14 +14,11 @@ Telegram; the widget polls for replies and shows them live.
 4. **Stuart replies in Telegram** (see "Replying" below) → his reply appears in the
    widget within a few seconds, and the chat is now "live" — polling continues for the
    rest of the conversation, not just the first reply.
-5. **No reply within `LIVE_WAIT_SECONDS` (default 90s)** → the widget offers a fallback:
-   *"Stuart seems to be away from his terminal. Want to chat with an AI that knows
-   his work? Your message is already in his inbox either way."* If Stuart replies later,
-   even mid-AI-chat, his message still comes through and the widget switches back to live.
-6. AI mode: visitor chats with a small AI persona. **Currently a canned/rotating
-   response** (`worker/chatAi.ts`), not a real model — same UX as the original design
-   demo, just served from the Worker. Swapping in a real Claude call is a contained
-   follow-up (see "AI fallback" below); the frontend contract doesn't change.
+5. **No reply within `LIVE_WAIT_SECONDS` (default 90s)** → the widget prints a line
+   recommending the visitor email Stuart directly (`mailto:` link), since the message
+   already reached his phone either way. If Stuart replies later, his message still
+   comes through and the widget switches to live — the email line is just a faster
+   alternative, not a dead end.
 
 ## Replying in Telegram
 
@@ -36,7 +33,7 @@ session, so replying to any message in that thread routes correctly.
 
 ## Frontend contract
 
-All backend interaction goes through four endpoints, configured at the top of
+All backend interaction goes through three endpoints, configured at the top of
 `ChatWidget.astro`:
 
 | Endpoint | Method | Body / Query | Returns |
@@ -44,14 +41,14 @@ All backend interaction goes through four endpoints, configured at the top of
 | `/api/chat/session` | POST | `{ name, message }` | `{ sessionId, stuartAvailable }` |
 | `/api/chat/send` | POST | `{ sessionId, message }` | `{ ok }` |
 | `/api/chat/poll` | GET | `?sessionId=&after=<n>` | `{ newMessages: [{text, ts}], status: 'waiting'\|'live' }` |
-| `/api/chat/ai` | POST | `{ sessionId, messages: [{role, content}] }` | `{ reply }` |
 
 `after` is a count of Stuart-authored messages the client has already rendered — the
 Worker returns only messages past that count, so the widget's poll loop can run
 continuously without re-showing old messages. The client-side poll loop
 (`ChatWidget.astro`) runs for the life of the chat, not just the initial wait, so
 `status` only ever needs to report `'waiting'` or `'live'` — a timeout with no reply is
-handled client-side (that's the AI-offer trigger), the server never needs to say "away".
+handled client-side (that's the email-recommendation trigger), the server never needs
+to say "away".
 
 ## Architecture
 
@@ -60,7 +57,7 @@ The site deploys as a Cloudflare Worker with static assets (`wrangler.jsonc`):
 everything else (the built Astro site).
 
 - `worker/index.ts` — router: `/api/chat/session`, `/api/chat/send`, `/api/chat/poll`,
-  `/api/chat/ai`, and `/api/telegram/webhook`.
+  and `/api/telegram/webhook`.
 - `worker/telegram.ts` — thin Telegram Bot API client (`sendMessage`, webhook secret
   verification).
 - `worker/chatHub.ts` — a single global **Durable Object** (`ChatHub`, accessed via
@@ -72,7 +69,6 @@ everything else (the built Astro site).
   ~30s to show up). A Durable Object is strongly consistent and single-threaded per
   instance, so a reply is visible on the very next poll. One instance is plenty at
   personal-portfolio traffic.
-- `worker/chatAi.ts` — canned AI-fallback replies (see above).
 
 ### Telegram setup (one-time, manual)
 
@@ -102,15 +98,6 @@ For local testing, `.dev.vars` (gitignored) can hold the same three variables fo
 there — use `npm run dev:worker` (`astro build && wrangler dev`) for full-stack local
 testing.
 
-### AI fallback
-
-`/api/chat/ai` currently returns a canned, rotating reply — no external API call. To
-upgrade to a real model: call Anthropic's Messages API (Haiku-class model is plenty for
-Q&A over a fixed bio) from `worker/chatAi.ts`, with a system prompt built from
-`intake/` content, `max_tokens` capped (~500), and a per-IP rate limit. The Worker
-already proxies every AI call server-side, so the API key would never touch the client.
-Same request/response contract — no frontend change needed.
-
 ### Abuse guardrails
 
 - `/api/chat/session` is rate-limited per IP (20/day, tracked in the `ChatHub` Durable
@@ -125,8 +112,8 @@ Same request/response contract — no frontend change needed.
 - Terminal window reuses the TerminalCard chrome recipe (Yaru controls right, #300a24
   body, Ubuntu Mono) so the widget reads as part of the design system.
 - Messages render as terminal lines: visitor = `you@guest:~$`, Stuart = green
-  `stuart@stuartbingham:~$`, AI = clearly-labeled `ai@stuartbingham:~$` with an
-  `[AI]` marker and an intro disclaimer line.
+  `stuart@stuartbingham:~$`. System lines (status updates, the away/email
+  recommendation) render unprefixed in muted text.
 - Accessible: dialog role, focus moves in on open and returns on close, Escape closes,
   `aria-live="polite"` message log, all controls keyboard-reachable.
 - Reduced motion: no typing animations in the widget; instant message rendering.

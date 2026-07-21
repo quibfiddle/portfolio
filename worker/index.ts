@@ -1,7 +1,6 @@
 import type { Env } from './env';
 import type { TelegramUpdate } from './telegram';
 import { sendTelegramMessage, verifyWebhookSecret } from './telegram';
-import { getCannedReply, type AiMessage } from './chatAi';
 import { ChatHub } from './chatHub';
 
 export { ChatHub };
@@ -88,17 +87,6 @@ async function handlePoll(request: Request, env: Env): Promise<Response> {
   return jsonResponse({ newMessages, status: session.status });
 }
 
-async function handleAi(request: Request): Promise<Response> {
-  let body: { sessionId?: string; messages?: AiMessage[] };
-  try {
-    body = await request.json();
-  } catch {
-    return jsonError('Invalid JSON', 400);
-  }
-  const reply = getCannedReply(body.messages ?? []);
-  return jsonResponse({ reply });
-}
-
 // Telegram requires a fast 200 ack, so failures here are logged (visible via
 // `wrangler tail`) rather than surfaced as HTTP errors that would trigger retries.
 async function handleWebhook(request: Request, env: Env): Promise<Response> {
@@ -154,9 +142,6 @@ export default {
       }
       if (url.pathname === '/api/chat/poll' && request.method === 'GET') {
         return await handlePoll(request, env);
-      }
-      if (url.pathname === '/api/chat/ai' && request.method === 'POST') {
-        return await handleAi(request);
       }
       if (url.pathname === '/api/telegram/webhook' && request.method === 'POST') {
         return await handleWebhook(request, env);
